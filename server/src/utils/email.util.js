@@ -67,4 +67,39 @@ async function sendPasswordResetEmail(toEmail, resetToken) {
   await transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendPasswordResetEmail };
+/**
+ * Sends an email with an invoice PDF attachment.
+ * @param {string} toEmail - Recipient email address
+ * @param {string} invoiceId - Invoice ID for reference
+ * @param {Buffer} pdfBuffer - The generated PDF buffer
+ * @returns {Promise<void>}
+ */
+async function sendInvoiceEmail(toEmail, invoiceId, pdfBuffer) {
+  const transporter = createTransporter();
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || '"SMS Billing" <billing@sms.com>',
+    to: toEmail,
+    subject: `Your Invoice ${invoiceId} — Subscription Management System`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Your Invoice is Ready</h2>
+        <p>Dear Customer,</p>
+        <p>Please find attached your invoice (ID: ${invoiceId}) for your recent subscription order.</p>
+        <p>Thank you for your business!</p>
+      </div>
+    `,
+    text: `Your Invoice (ID: ${invoiceId}) is ready and attached to this email. Thank you for your business!`,
+    attachments: [
+      {
+        filename: `Invoice_${invoiceId}.pdf`,
+        content: pdfBuffer,
+        contentType: 'application/pdf',
+      },
+    ],
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
+module.exports = { sendPasswordResetEmail, sendInvoiceEmail };

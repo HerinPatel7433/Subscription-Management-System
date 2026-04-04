@@ -6,15 +6,71 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "base_url", "value": "http://localhost:5000", "type": "string" },
-    { "key": "jwt_token", "value": "", "type": "string" },
-    { "key": "product_id", "value": "", "type": "string" },
-    { "key": "variant_id", "value": "", "type": "string" },
-    { "key": "plan_id", "value": "", "type": "string" }
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "product_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "variant_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "plan_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "template_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "subscription_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tax_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "discount_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "invoice_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "payment_id",
+      "value": "",
+      "type": "string"
+    }
   ],
   "auth": {
     "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{jwt_token}}", "type": "string" }]
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
@@ -39,14 +95,31 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Teesh Patel\",\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"Admin@1234\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/signup", "host": ["{{base_url}}"], "path": ["api", "auth", "signup"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            }
           }
         },
         {
@@ -67,14 +140,31 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"Admin@1234\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
@@ -91,14 +181,31 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"WrongPassword!\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
@@ -115,40 +222,93 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"weak@sms.com\",\n  \"password\": \"short\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/signup", "host": ["{{base_url}}"], "path": ["api", "auth", "signup"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/signup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            }
           }
         },
         {
           "name": "Request Password Reset",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"teesh@sms.com\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/reset-password/request", "host": ["{{base_url}}"], "path": ["api", "auth", "reset-password", "request"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/reset-password/request",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password",
+                "request"
+              ]
+            }
           }
         },
         {
           "name": "Confirm Password Reset",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"token\": \"PASTE_TOKEN_FROM_EMAIL_HERE\",\n  \"password\": \"NewAdmin@5678\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/auth/reset-password/confirm", "host": ["{{base_url}}"], "path": ["api", "auth", "reset-password", "confirm"] }
+            "url": {
+              "raw": "{{base_url}}/api/auth/reset-password/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password",
+                "confirm"
+              ]
+            }
           }
         }
       ]
@@ -172,7 +332,16 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -194,12 +363,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Enterprise License\",\n  \"type\": \"service\",\n  \"sales_price\": 299.99,\n  \"cost_price\": 150.00\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -217,7 +400,17 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}"
+              ]
+            }
           }
         },
         {
@@ -234,7 +427,17 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/products/00000000-0000-0000-0000-000000000000", "host": ["{{base_url}}"], "path": ["api", "products", "00000000-0000-0000-0000-000000000000"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/00000000-0000-0000-0000-000000000000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "00000000-0000-0000-0000-000000000000"
+              ]
+            }
           }
         },
         {
@@ -252,12 +455,27 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Enterprise License Pro\",\n  \"sales_price\": 349.99\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}"
+              ]
+            }
           }
         },
         {
@@ -275,12 +493,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"\",\n  \"type\": \"service\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -298,7 +530,17 @@
           ],
           "request": {
             "method": "DELETE",
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}"
+              ]
+            }
           }
         }
       ]
@@ -322,12 +564,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Cloud Storage\",\n  \"type\": \"service\",\n  \"sales_price\": 19.99,\n  \"cost_price\": 5.00\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -345,7 +601,18 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/variants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}",
+                "variants"
+              ]
+            }
           }
         },
         {
@@ -367,12 +634,28 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"attribute\": \"storage\",\n  \"value\": \"100GB\",\n  \"extra_price\": 5.00\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/variants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}",
+                "variants"
+              ]
+            }
           }
         },
         {
@@ -389,12 +672,29 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"value\": \"200GB\",\n  \"extra_price\": 9.99\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants", "{{variant_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}",
+                "variants",
+                "{{variant_id}}"
+              ]
+            }
           }
         },
         {
@@ -411,7 +711,19 @@
           ],
           "request": {
             "method": "DELETE",
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants", "{{variant_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}",
+                "variants",
+                "{{variant_id}}"
+              ]
+            }
           }
         },
         {
@@ -428,12 +740,28 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"attribute\": \"\",\n  \"extra_price\": -5\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/variants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "{{product_id}}",
+                "variants"
+              ]
+            }
           }
         }
       ]
@@ -456,7 +784,16 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans"
+              ]
+            }
           }
         },
         {
@@ -478,12 +815,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Pro Monthly\",\n  \"price\": 49.99,\n  \"billing_period\": \"monthly\",\n  \"min_qty\": 1,\n  \"start_date\": \"2026-01-01\",\n  \"end_date\": \"2026-12-31\",\n  \"auto_close\": false,\n  \"closable\": true,\n  \"pausable\": true,\n  \"renewable\": true\n}"
             },
-            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans"
+              ]
+            }
           }
         },
         {
@@ -501,12 +852,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Bad Plan\",\n  \"price\": 9.99,\n  \"billing_period\": \"biannual\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans"
+              ]
+            }
           }
         },
         {
@@ -524,12 +889,26 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Bad Dates Plan\",\n  \"price\": 9.99,\n  \"billing_period\": \"monthly\",\n  \"start_date\": \"2026-12-31\",\n  \"end_date\": \"2026-01-01\"\n}"
             },
-            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans"
+              ]
+            }
           }
         },
         {
@@ -547,7 +926,17 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans/{{plan_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans",
+                "{{plan_id}}"
+              ]
+            }
           }
         },
         {
@@ -564,7 +953,17 @@
           ],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/plans/00000000-0000-0000-0000-000000000000", "host": ["{{base_url}}"], "path": ["api", "plans", "00000000-0000-0000-0000-000000000000"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans/00000000-0000-0000-0000-000000000000",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans",
+                "00000000-0000-0000-0000-000000000000"
+              ]
+            }
           }
         },
         {
@@ -582,12 +981,27 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"price\": 59.99,\n  \"pausable\": false\n}"
             },
-            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans/{{plan_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans",
+                "{{plan_id}}"
+              ]
+            }
           }
         },
         {
@@ -605,7 +1019,417 @@
           ],
           "request": {
             "method": "DELETE",
-            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+            "url": {
+              "raw": "{{base_url}}/api/plans/{{plan_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "plans",
+                "{{plan_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📄 Quotation Templates",
+      "item": [
+        {
+          "name": "List Templates",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/templates",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "templates"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Template",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('template_id', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Standard Quote\",\n  \"validity_days\": 30,\n  \"plan_id\": \"{{plan_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/templates",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "templates"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Subscriptions",
+      "item": [
+        {
+          "name": "List Subscriptions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Subscription",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('subscription_id', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"PASTE_USER_ID\",\n  \"plan_id\": \"{{plan_id}}\",\n  \"start_date\": \"2026-06-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirm Subscription",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/{{subscription_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                "{{subscription_id}}",
+                "confirm"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Activate Subscription",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/subscriptions/{{subscription_id}}/activate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "subscriptions",
+                "{{subscription_id}}",
+                "activate"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💰 Taxes",
+      "item": [
+        {
+          "name": "List Active Taxes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/taxes/active",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "taxes",
+                "active"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Tax",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('tax_id', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"VAT 20\",\n  \"rate\": 20.0,\n  \"type\": \"standard\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/taxes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "taxes"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎫 Discounts",
+      "item": [
+        {
+          "name": "List Discounts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/discounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "discounts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Discount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('discount_id', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"SUMMER_10\",\n  \"type\": \"percentage\",\n  \"value\": 10,\n  \"min_purchase\": 100\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/discounts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "discounts"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧾 Invoices",
+      "item": [
+        {
+          "name": "Generate Invoice",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('invoice_id', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/invoices/generate/{{subscription_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                "generate",
+                "{{subscription_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Confirm Invoice",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/invoices/{{invoice_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                "{{invoice_id}}",
+                "confirm"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send Invoice Email",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/api/invoices/{{invoice_id}}/send",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                "{{invoice_id}}",
+                "send"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Print (PDF)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/invoices/{{invoice_id}}/print",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "invoices",
+                "{{invoice_id}}",
+                "print"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Payments",
+      "item": [
+        {
+          "name": "Record Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invoice_id\": \"{{invoice_id}}\",\n  \"payment_method\": \"credit_card\",\n  \"amount\": 50.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Outstanding Balances",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/payments/outstanding",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "outstanding"
+              ]
+            }
           }
         }
       ]
@@ -626,9 +1450,20 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -647,15 +1482,35 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "PASTE_PORTAL_ROLE_TOKEN_HERE", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "PASTE_PORTAL_ROLE_TOKEN_HERE",
+                  "type": "string"
+                }
+              ]
             },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Unauthorized Product\",\n  \"type\": \"service\",\n  \"sales_price\": 10,\n  \"cost_price\": 5\n}"
             },
-            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
           }
         },
         {
@@ -672,9 +1527,20 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "GET",
-            "url": { "raw": "{{base_url}}/api/health", "host": ["{{base_url}}"], "path": ["api", "health"] }
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            }
           }
         }
       ]
