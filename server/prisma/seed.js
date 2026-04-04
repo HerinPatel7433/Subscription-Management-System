@@ -3,6 +3,7 @@
 // Handles multi-row INSERTs correctly by splitting only on semicolons
 // that end a full statement (not those inside string literals).
 
+require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
