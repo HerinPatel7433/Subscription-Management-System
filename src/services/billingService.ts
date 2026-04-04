@@ -109,8 +109,15 @@ export const getInvoices = (params?: Record<string, string>) =>
 export const getInvoice = (id: string) =>
   api.get<Invoice>(`/invoices/${id}`)
 
-export const updateInvoiceStatus = (id: string, status: Invoice['status']) =>
-  api.patch<Invoice>(`/invoices/${id}/status`, { status })
+export const updateInvoiceStatus = (id: string, status: Invoice['status']) => {
+  if (status === 'confirmed') {
+    return api.post<Invoice>(`/invoices/${id}/confirm`)
+  }
+  if (status === 'cancelled') {
+    return api.post<Invoice>(`/invoices/${id}/cancel`)
+  }
+  return Promise.reject(new Error(`Unsupported status update: ${status}`))
+}
 
 export const sendInvoiceEmail = (id: string) =>
   api.post(`/invoices/${id}/send`)
