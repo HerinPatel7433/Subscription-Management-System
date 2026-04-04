@@ -5,11 +5,19 @@ const { prisma } = require('../utils/prisma.util');
 // Helper
 function formatDiscount(discount) {
   return {
-    ...discount,
+    id: discount.id,
+    name: discount.name,
+    type: discount.type,
     value: Number(discount.value),
-    minPurchase: Number(discount.minPurchase),
-    startDate: discount.startDate ? discount.startDate.toISOString().split('T')[0] : null,
-    endDate: discount.endDate ? discount.endDate.toISOString().split('T')[0] : null,
+    min_purchase: Number(discount.minPurchase),
+    min_qty: discount.minQty,
+    start_date: discount.startDate ? discount.startDate.toISOString().split('T')[0] : null,
+    end_date: discount.endDate ? discount.endDate.toISOString().split('T')[0] : null,
+    usage_limit: discount.usageLimit,
+    created_by_admin: discount.createdByAdmin,
+    created_at: discount.createdAt,
+    deleted_at: discount.deletedAt,
+    admin: discount.admin,
   };
 }
 

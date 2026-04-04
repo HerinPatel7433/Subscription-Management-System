@@ -6,17 +6,33 @@ const { sendInvoiceEmail } = require('../utils/email.util');
 // Helper
 function formatInvoice(i) {
   return {
-    ...i,
-    totalAmount: Number(i.totalAmount),
-    issuedDate: i.issuedDate.toISOString().split('T')[0],
-    dueDate: i.dueDate.toISOString().split('T')[0],
+    id: i.id,
+    invoice_number: i.invoiceNumber || i.id,
+    subscription_id: i.subscriptionId,
+    customer_id: i.customerId,
+    customer_name: i.customer ? i.customer.name : undefined,
+    customer_email: i.customer ? i.customer.email : undefined,
+    status: i.status,
+    amount: Number(i.totalAmount),
+    grand_total: Number(i.totalAmount),
+    total_amount: Number(i.totalAmount),
+    issued_date: i.issuedDate.toISOString().split('T')[0],
+    due_date: i.dueDate.toISOString().split('T')[0],
+    created_at: i.createdAt,
     lines: i.lines
       ? i.lines.map((l) => ({
-          ...l,
-          unitPrice: Number(l.unitPrice),
-          taxAmount: Number(l.taxAmount),
-          discountAmount: Number(l.discountAmount),
-          lineTotal: Number(l.lineTotal),
+          id: l.id,
+          product_id: l.productId,
+          product_name: l.product ? l.product.name : undefined,
+          quantity: l.quantity,
+          unit_price: Number(l.unitPrice),
+          tax_amount: Number(l.taxAmount),
+          discount_amount: Number(l.discountAmount),
+          line_total: Number(l.lineTotal),
+          // frontend InvoicesPage uses these fields:
+          tax_percent: 0,
+          discount_percent: 0,
+          total: Number(l.lineTotal),
         }))
       : undefined,
   };

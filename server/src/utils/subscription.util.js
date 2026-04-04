@@ -40,23 +40,44 @@ function canTransition(from, to) {
 }
 
 /**
- * Serialises a subscription record, converting Prisma Decimals and Dates to
- * plain JS types for JSON responses.
+ * Serialises a subscription record, converting Prisma Decimals, Dates, and
+ * camelCase → snake_case for JSON responses.
  * @param {object} sub - Raw Prisma subscription object
  * @returns {object}
  */
 function formatSubscription(sub) {
   return {
-    ...sub,
-    startDate: sub.startDate ? sub.startDate.toISOString().split('T')[0] : null,
-    expirationDate: sub.expirationDate
-      ? sub.expirationDate.toISOString().split('T')[0]
-      : null,
+    id: sub.id,
+    subscription_number: sub.subscriptionNumber,
+    customer_id: sub.customerId,
+    customer_name: sub.customer ? sub.customer.name : undefined,
+    customer_email: sub.customer ? sub.customer.email : undefined,
+    plan_id: sub.planId,
+    plan_name: sub.plan ? sub.plan.name : undefined,
+    start_date: sub.startDate ? sub.startDate.toISOString().split('T')[0] : null,
+    expiration_date: sub.expirationDate ? sub.expirationDate.toISOString().split('T')[0] : null,
+    next_billing_date: sub.nextBillingDate ? sub.nextBillingDate.toISOString().split('T')[0] : null,
+    payment_terms: sub.paymentTerms,
+    status: sub.status,
+    created_at: sub.createdAt,
+    plan: sub.plan ? {
+      id: sub.plan.id,
+      name: sub.plan.name,
+      billing_period: sub.plan.billingPeriod,
+      pausable: sub.plan.pausable,
+      renewable: sub.plan.renewable,
+      closable: sub.plan.closable,
+    } : undefined,
     lines: sub.lines
       ? sub.lines.map((l) => ({
-          ...l,
-          unitPrice: Number(l.unitPrice),
+          id: l.id,
+          product_id: l.productId,
+          product_name: l.product ? l.product.name : undefined,
+          quantity: l.quantity,
+          unit_price: Number(l.unitPrice),
           amount: Number(l.amount),
+          tax_id: l.taxId,
+          tax: l.tax ? { id: l.tax.id, name: l.tax.name, rate: Number(l.tax.rate) } : undefined,
         }))
       : undefined,
   };

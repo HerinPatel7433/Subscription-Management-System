@@ -5,17 +5,26 @@ const { prisma } = require('../utils/prisma.util');
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /**
- * Converts Prisma Decimal fields to plain numbers for JSON serialisation.
+ * Converts Prisma camelCase fields to snake_case for JSON serialisation.
  */
 function formatProduct(product) {
   return {
-    ...product,
-    salesPrice: product.salesPrice !== undefined ? Number(product.salesPrice) : undefined,
-    costPrice: product.costPrice !== undefined ? Number(product.costPrice) : undefined,
+    id: product.id,
+    name: product.name,
+    type: product.type,
+    sales_price: product.salesPrice !== undefined ? Number(product.salesPrice) : undefined,
+    cost_price: product.costPrice !== undefined ? Number(product.costPrice) : undefined,
+    created_by: product.createdById,
+    created_at: product.createdAt,
+    deleted_at: product.deletedAt,
     variants: product.variants
       ? product.variants.map((v) => ({
-          ...v,
-          extraPrice: Number(v.extraPrice),
+          id: v.id,
+          product_id: v.productId,
+          attribute: v.attribute,
+          value: v.value,
+          extra_price: Number(v.extraPrice),
+          created_at: v.createdAt,
         }))
       : undefined,
   };

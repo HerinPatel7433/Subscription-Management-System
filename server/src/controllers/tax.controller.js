@@ -5,8 +5,12 @@ const { prisma } = require('../utils/prisma.util');
 // Helper
 function formatTax(tax) {
   return {
-    ...tax,
+    id: tax.id,
+    name: tax.name,
     rate: Number(tax.rate),
+    type: tax.type,
+    is_active: tax.isActive,
+    created_at: tax.createdAt,
   };
 }
 

@@ -5,14 +5,22 @@ const { prisma } = require('../utils/prisma.util');
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
 /**
- * Converts Prisma Decimal/Date fields to plain JS types for JSON responses.
+ * Converts Prisma camelCase/Decimal/Date fields to snake_case plain JS types for JSON responses.
  */
 function formatPlan(plan) {
   return {
-    ...plan,
+    id: plan.id,
+    name: plan.name,
     price: Number(plan.price),
-    startDate: plan.startDate ? plan.startDate.toISOString().split('T')[0] : null,
-    endDate: plan.endDate ? plan.endDate.toISOString().split('T')[0] : null,
+    billing_period: plan.billingPeriod,
+    min_qty: plan.minQty,
+    start_date: plan.startDate ? plan.startDate.toISOString().split('T')[0] : null,
+    end_date: plan.endDate ? plan.endDate.toISOString().split('T')[0] : null,
+    auto_close: plan.autoClose,
+    closable: plan.closable,
+    pausable: plan.pausable,
+    renewable: plan.renewable,
+    created_at: plan.createdAt,
   };
 }
 
