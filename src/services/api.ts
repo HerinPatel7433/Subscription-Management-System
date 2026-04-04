@@ -23,9 +23,13 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// ── Response interceptor: handle 401 globally ────────────────────────
+// ── Response interceptor: handle 401 globally and unwrap body ─────────
 api.interceptors.response.use(
   (response) => {
+    // Automatically unwrap the standard backend JSON wrapper if present
+    if (response.data && typeof response.data === 'object' && 'success' in response.data && 'data' in response.data) {
+      response.data = response.data.data;
+    }
     return response;
   },
   (error) => {
