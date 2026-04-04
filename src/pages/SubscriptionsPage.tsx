@@ -49,14 +49,15 @@ export default function SubscriptionsPage() {
   const fetchAll = useCallback(async () => {
     try {
       setLoading(true)
-      const [subs, ps, us, tmpl, prods] = await Promise.all([
+      const [subs, ps, us, tmpl, prods] = await Promise.allSettled([
         getSubscriptions(), getPlans(), getUsers(), getTemplates(), getProducts(),
       ])
-      setSubscriptions(subs.data)
-      setPlans(ps.data)
-      setUsers(us.data)
-      setTemplates(tmpl.data)
-      setProducts(prods.data)
+      if (subs.status === 'fulfilled') setSubscriptions(subs.value.data ?? [])
+      if (ps.status === 'fulfilled')   setPlans(ps.value.data ?? [])
+      if (us.status === 'fulfilled')   setUsers(us.value.data ?? [])
+      if (tmpl.status === 'fulfilled') setTemplates(tmpl.value.data ?? [])
+      if (prods.status === 'fulfilled') setProducts(prods.value.data ?? [])
+      if (subs.status === 'rejected')  toast('error', 'Failed to load subscriptions')
     } catch {
       toast('error', 'Failed to load data')
     } finally {

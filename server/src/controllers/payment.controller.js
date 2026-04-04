@@ -5,8 +5,15 @@ const { prisma } = require('../utils/prisma.util');
 // Helper
 function formatPayment(p) {
   return {
-    ...p,
+    id: p.id,
+    invoice_id: p.invoiceId,
+    invoice_number: p.invoice_number ?? null,    // set by join query below
+    customer_name: p.customer_name ?? null,       // set by join query below
     amount: Number(p.amount),
+    method: p.paymentMethod,
+    payment_date: p.paymentDate ? p.paymentDate.toISOString().split('T')[0] : null,
+    notes: p.notes,
+    created_at: p.createdAt,
   };
 }
 
@@ -105,13 +112,34 @@ async function listPayments(req, res) {
       where: {
         ...(invoice_id && { invoiceId: invoice_id }),
       },
-      include: { invoice: { select: { subscriptionId: true, status: true, totalAmount: true } } },
+      include: {
+        invoice: {
+          select: {
+            id: true,
+            subscriptionId: true,
+            status: true,
+            totalAmount: true,
+            customer: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
       orderBy: { paymentDate: 'desc' },
     });
 
     return res.status(200).json({
       success: true,
-      data: payments.map((p) => ({ ...formatPayment(p), invoice: { ...p.invoice, totalAmount: Number(p.invoice.totalAmount) } })),
+      data: payments.map((p) => ({
+        ...formatPayment(p),
+        invoice_number: p.invoice ? `INV-${p.invoice.id.slice(0, 8).toUpperCase()}` : null,
+        customer_name: p.invoice?.customer?.name ?? null,
+        invoice: p.invoice ? {
+          id: p.invoice.id,
+          invoice_number: `INV-${p.invoice.id.slice(0, 8).toUpperCase()}`,
+          subscription_id: p.invoice.subscriptionId,
+          status: p.invoice.status,
+          total_amount: Number(p.invoice.totalAmount),
+        } : null,
+      })),
       message: 'Payments retrieved successfully.',
     });
   } catch (error) {

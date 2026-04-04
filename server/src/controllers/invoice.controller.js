@@ -7,7 +7,7 @@ const { sendInvoiceEmail } = require('../utils/email.util');
 function formatInvoice(i) {
   return {
     id: i.id,
-    invoice_number: i.invoiceNumber || i.id,
+    invoice_number: `INV-${i.id.slice(0, 8).toUpperCase()}`,
     subscription_id: i.subscriptionId,
     customer_id: i.customerId,
     customer_name: i.customer ? i.customer.name : undefined,
