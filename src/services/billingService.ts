@@ -126,8 +126,8 @@ export const getPayments = () =>
 export const recordPayment = (data: RecordPaymentPayload) =>
   api.post<Payment>('/payments', data)
 
-export const getInvoiceBalance = (invoiceId: string) =>
-  api.get<{ outstanding: number }>(`/invoices/${invoiceId}/balance`)
+export const getInvoiceBalance = () =>
+  api.get<{ invoice_id: string; outstanding: number }[]>('/payments/outstanding')
 
 // ── Discount API ──────────────────────────────────────────────────────
 
