@@ -58,32 +58,7 @@ export default function SignupPage() {
     }
   }
 
-  const inputRow = (
-    id: string,
-    label: string,
-    type: string,
-    placeholder: string,
-    icon: React.ReactNode,
-    errorMsg?: string,
-    extra?: React.ReactNode,
-    extraProps?: Record<string, unknown>,
-  ) => (
-    <div>
-      <label htmlFor={id} className="form-label">{label}</label>
-      <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">{icon}</span>
-        <input
-          id={id}
-          type={type}
-          placeholder={placeholder}
-          className={`form-input pl-10 ${type === 'password' ? 'pr-11' : ''} ${errorMsg ? 'error' : ''}`}
-          {...extraProps}
-        />
-        {extra}
-      </div>
-      {errorMsg && <p className="field-error"><AlertCircle size={12} />{errorMsg}</p>}
-    </div>
-  )
+
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-4 relative overflow-hidden">

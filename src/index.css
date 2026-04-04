@@ -7,7 +7,7 @@
   *, *::before, *::after { box-sizing: border-box; }
 
   html {
-    @apply dark;
+    color-scheme: dark;
     scroll-behavior: smooth;
   }
 
