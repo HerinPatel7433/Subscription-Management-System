@@ -45,3 +45,14 @@ Thumbs.db
 .DS_Store
 ehthumbs.db
 Desktop.ini
+
+# Vite
+.vite/
+vite.config.ts.timestamp-*
+
+# TypeScript
+*.tsbuildinfo
+
+# Local env files
+.env.local
+.env.*.local
