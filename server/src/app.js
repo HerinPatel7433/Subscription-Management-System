@@ -13,6 +13,8 @@ const taxRoutes = require('./routes/tax.routes');
 const discountRoutes = require('./routes/discount.routes');
 const invoiceRoutes = require('./routes/invoice.routes');
 const paymentRoutes = require('./routes/payment.routes');
+const adminRoutes = require('./routes/admin.routes');
+const { startJobs } = require('./jobs');
 
 const app = express();
 
@@ -45,6 +47,10 @@ app.use('/api/taxes', taxRoutes);
 app.use('/api/discounts', discountRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+
+// ─── Start Cron Jobs ───────────────────────────────────────────────────────────
+startJobs();
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {

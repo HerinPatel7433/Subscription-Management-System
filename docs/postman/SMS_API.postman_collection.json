@@ -1544,6 +1544,92 @@
           }
         }
       ]
+    },
+    {
+      "name": "⚙️ Admin Operations",
+      "item": [
+        {
+          "name": "Trigger Billing Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobName\": \"billing\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/trigger-jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "trigger-jobs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Trigger Expiry Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobName\": \"expiry\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/trigger-jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "trigger-jobs"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Trigger Overdue Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobName\": \"overdue\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/trigger-jobs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "trigger-jobs"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
