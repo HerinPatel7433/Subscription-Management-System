@@ -49,7 +49,7 @@ export default function SubscriptionsPage() {
     try {
       setLoading(true)
       const [subs, ps, us, tmpl, prods] = await Promise.all([
-        getSubscriptions(), getPlans(), getUsers(), getTemplates(), getProducts(),
+        getSubscriptions(), getPlans(), getUsers('portal'), getTemplates(), getProducts(),
       ])
       setSubscriptions(subs.data)
       setPlans(ps.data)

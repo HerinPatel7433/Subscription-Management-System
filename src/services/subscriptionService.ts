@@ -114,4 +114,5 @@ export const getTemplates = () => api.get<QuotationTemplate[]>('/quotation-templ
 
 // ── Users ─────────────────────────────────────────────────────────────
 
-export const getUsers = () => api.get<User[]>('/users')
+export const getUsers = (role?: string) =>
+  api.get<User[]>('/users', { params: role ? { role } : undefined })
