@@ -15,37 +15,6 @@ import {
 import { getPlans } from '@/services/subscriptionService'
 import type { RecurringPlan } from '@/services/subscriptionService'
 
-// ── Mock data ─────────────────────────────────────────────────────────
-const MOCK_SUMMARY: ReportSummary = {
-  active_subscriptions: 47,
-  monthly_revenue: 182500,
-  pending_invoices: 12,
-  overdue_invoices: 3,
-}
-
-const MOCK_REVENUE: RevenueByMonth[] = [
-  { month: 'May 24',  revenue: 98000  },
-  { month: 'Jun 24',  revenue: 115000 },
-  { month: 'Jul 24',  revenue: 102000 },
-  { month: 'Aug 24',  revenue: 134000 },
-  { month: 'Sep 24',  revenue: 128000 },
-  { month: 'Oct 24',  revenue: 151000 },
-  { month: 'Nov 24',  revenue: 143000 },
-  { month: 'Dec 24',  revenue: 172000 },
-  { month: 'Jan 25',  revenue: 159000 },
-  { month: 'Feb 25',  revenue: 168000 },
-  { month: 'Mar 25',  revenue: 174000 },
-  { month: 'Apr 25',  revenue: 182500 },
-]
-
-const MOCK_CUSTOMERS: TopCustomer[] = [
-  { customer_id: 'c1', customer_name: 'Acme Corp',       total_value: 89500, active_subscriptions: 3 },
-  { customer_id: 'c2', customer_name: 'TechStart Ltd',   total_value: 54000, active_subscriptions: 2 },
-  { customer_id: 'c3', customer_name: 'BizSol Inc',      total_value: 49800, active_subscriptions: 2 },
-  { customer_id: 'c4', customer_name: 'NovaWave',        total_value: 36000, active_subscriptions: 1 },
-  { customer_id: 'c5', customer_name: 'CloudPeak', total_value: 29900, active_subscriptions: 1 },
-]
-
 // ── Custom chart tooltip ──────────────────────────────────────────────
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload && payload.length) {
@@ -111,13 +80,14 @@ export default function ReportsPage() {
         getPlans(),
       ])
       setSummary(sum.data)
-      setRevenue(rev.data.length ? rev.data : MOCK_REVENUE)
-      setCustomers(cust.data.length ? cust.data : MOCK_CUSTOMERS)
-      setPlans(ps.data)
+      setRevenue(rev.data || [])
+      setCustomers(cust.data || [])
+      setPlans(ps.data || [])
     } catch {
-      setSummary(MOCK_SUMMARY)
-      setRevenue(MOCK_REVENUE)
-      setCustomers(MOCK_CUSTOMERS)
+      setSummary(null)
+      setRevenue([])
+      setCustomers([])
+      toast('error', 'Failed to load report data')
     } finally {
       setLoading(false)
     }
@@ -145,7 +115,12 @@ export default function ReportsPage() {
     }
   }
 
-  const s = summary ?? MOCK_SUMMARY
+  const s = summary ?? {
+    active_subscriptions: 0,
+    monthly_revenue: 0,
+    pending_invoices: 0,
+    overdue_invoices: 0,
+  }
 
   // Bar colors — highlight max revenue month
   const maxRevenue = Math.max(...revenue.map((r) => r.revenue))

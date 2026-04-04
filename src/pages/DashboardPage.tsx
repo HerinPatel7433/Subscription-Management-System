@@ -19,39 +19,7 @@ import {
   type SubscriptionStatusBreakdown,
 } from '@/services/billingService'
 
-// ── Mock data ─────────────────────────────────────────────────────────
-const MOCK_SUMMARY: ReportSummary = {
-  active_subscriptions: 47,
-  monthly_revenue: 182500,
-  pending_invoices: 12,
-  overdue_invoices: 3,
-}
 
-const MOCK_REVENUE: RevenueByMonth[] = [
-  { month: 'Nov 24', revenue: 143000 },
-  { month: 'Dec 24', revenue: 172000 },
-  { month: 'Jan 25', revenue: 159000 },
-  { month: 'Feb 25', revenue: 168000 },
-  { month: 'Mar 25', revenue: 174000 },
-  { month: 'Apr 25', revenue: 182500 },
-]
-
-const MOCK_BREAKDOWN: SubscriptionStatusBreakdown = {
-  active: 47, confirmed: 8, draft: 14, quotation: 5, closed: 22,
-}
-
-const MOCK_ACTIVITY: DashboardActivity[] = [
-  { id: 's1', type: 'subscription', title: 'SUB-0048', subtitle: 'Acme Corp — Pro Plan', status: 'active',    date: '2025-04-04', link: '/subscriptions/s1' },
-  { id: 's2', type: 'subscription', title: 'SUB-0047', subtitle: 'TechStart Ltd — Starter', status: 'confirmed', date: '2025-04-03', link: '/subscriptions/s2' },
-  { id: 's3', type: 'subscription', title: 'SUB-0046', subtitle: 'BizSol Inc — Enterprise', status: 'draft',   date: '2025-04-03', link: '/subscriptions/s3' },
-  { id: 's4', type: 'subscription', title: 'SUB-0045', subtitle: 'NovaWave — Pro Plan',     status: 'active',  date: '2025-04-02', link: '/subscriptions/s4' },
-  { id: 's5', type: 'subscription', title: 'SUB-0044', subtitle: 'CloudPeak — Starter',      status: 'closed',  date: '2025-04-01', link: '/subscriptions/s5' },
-  { id: 'i1', type: 'invoice',      title: 'INV-0021', subtitle: 'Acme Corp',    status: 'confirmed', amount: 4999,  date: '2025-04-04', link: '/invoices' },
-  { id: 'i2', type: 'invoice',      title: 'INV-0020', subtitle: 'TechStart Ltd', status: 'paid',     amount: 999,   date: '2025-04-02', link: '/invoices' },
-  { id: 'i3', type: 'invoice',      title: 'INV-0019', subtitle: 'BizSol Inc',   status: 'overdue',  amount: 12500, date: '2025-03-20', link: '/invoices' },
-  { id: 'i4', type: 'invoice',      title: 'INV-0018', subtitle: 'NovaWave',     status: 'draft',    amount: 2200,  date: '2025-03-18', link: '/invoices' },
-  { id: 'i5', type: 'invoice',      title: 'INV-0017', subtitle: 'CloudPeak',     status: 'paid',     amount: 1499,  date: '2025-03-15', link: '/invoices' },
-]
 
 // ── Colour maps ───────────────────────────────────────────────────────
 const STATUS_BADGE: Record<string, string> = {
@@ -177,7 +145,7 @@ export default function DashboardPage() {
       const res = await getReportSummary()
       setSummary(res.data)
     } catch {
-      setSummary(MOCK_SUMMARY)   // fallback to mock
+      setSummary(null)
       setSummaryError(true)
     } finally {
       setSummaryLoading(false)
@@ -192,11 +160,11 @@ export default function DashboardPage() {
         getRevenueByMonth(),
         getSubscriptionStatusBreakdown(),
       ])
-      setRevenue(rev.data.length ? rev.data.slice(-6) : MOCK_REVENUE)
+      setRevenue((rev.data || []).slice(-6))
       setBreakdown(brk.data)
     } catch {
-      setRevenue(MOCK_REVENUE)
-      setBreakdown(MOCK_BREAKDOWN)
+      setRevenue([])
+      setBreakdown(null)
       setChartsError(true)
     } finally {
       setChartsLoading(false)
@@ -208,9 +176,9 @@ export default function DashboardPage() {
     setActivityLoading(true); setActivityError(false)
     try {
       const res = await getDashboardActivity()
-      setActivity(res.data.length ? res.data : MOCK_ACTIVITY)
+      setActivity(res.data || [])
     } catch {
-      setActivity(MOCK_ACTIVITY)
+      setActivity([])
       setActivityError(true)
     } finally {
       setActivityLoading(false)
@@ -224,7 +192,7 @@ export default function DashboardPage() {
   }, [fetchSummary, fetchCharts, fetchActivity])
 
   // ── Pie chart data ────────────────────────────────────────────────────
-  const bd = breakdown ?? MOCK_BREAKDOWN
+  const bd = breakdown ?? { active: 0, confirmed: 0, draft: 0, quotation: 0, closed: 0 }
   const pieData = [
     { name: 'Active',    value: bd.active    },
     { name: 'Draft',     value: bd.draft     },
@@ -262,7 +230,7 @@ export default function DashboardPage() {
     return 'Good evening'
   }
 
-  const s = summary ?? MOCK_SUMMARY
+  const s = summary ?? { active_subscriptions: 0, monthly_revenue: 0, pending_invoices: 0, overdue_invoices: 0 }
   const lastMonthRevenue = revenue.length >= 2 ? revenue[revenue.length - 2].revenue : null
   const revenuePct = lastMonthRevenue && lastMonthRevenue > 0
     ? Math.round(((s.monthly_revenue - lastMonthRevenue) / lastMonthRevenue) * 100)

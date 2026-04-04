@@ -25,11 +25,7 @@ const METHOD_BADGE: Record<PaymentMethod, string> = {
   other:         'bg-slate-500/20 text-slate-300 border-slate-500/30',
 }
 
-const MOCK_PAYMENTS: Payment[] = [
-  { id: '1', invoice_id: '1', invoice_number: 'INV-0001', customer_name: 'Acme Corp',    amount: 4999,  method: 'bank_transfer', payment_date: '2025-04-02' },
-  { id: '2', invoice_id: '2', invoice_number: 'INV-0002', customer_name: 'TechStart Ltd', amount: 999,   method: 'credit_card',  payment_date: '2025-03-18' },
-  { id: '3', invoice_id: '3', invoice_number: 'INV-0003', customer_name: 'BizSol Inc',   amount: 5000,  method: 'upi',           payment_date: '2025-04-11' },
-]
+
 
 type PaymentForm = {
   invoice_id: string
@@ -58,10 +54,10 @@ export default function PaymentsPage() {
     try {
       setLoading(true)
       const [pmts, invs] = await Promise.all([getPayments(), getInvoices()])
-      setPayments(pmts.data.length ? pmts.data : MOCK_PAYMENTS)
-      setInvoices(invs.data)
+      setPayments(pmts.data || [])
+      setInvoices(invs.data || [])
     } catch {
-      setPayments(MOCK_PAYMENTS)
+      setPayments([])
     } finally {
       setLoading(false)
     }
