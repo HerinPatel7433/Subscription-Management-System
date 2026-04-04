@@ -3,6 +3,7 @@ const { Router } = require('express');
 const { verifyToken, checkRole } = require('../middleware/auth.middleware');
 const {
   generateInvoice,
+  generateAll,
   listInvoices,
   getInvoice,
   confirmInvoice,
@@ -21,6 +22,7 @@ router.get('/:id', verifyToken, getInvoice);
 router.get('/:id/print', verifyToken, printInvoice);
 
 // Admin & Internal only
+router.post('/generate-all', verifyToken, checkRole('admin', 'internal'), generateAll);
 router.post('/generate/:subscriptionId', verifyToken, checkRole('admin', 'internal'), generateInvoice);
 router.post('/:id/confirm', verifyToken, checkRole('admin', 'internal'), confirmInvoice);
 router.post('/:id/cancel', verifyToken, checkRole('admin', 'internal'), cancelInvoice);

@@ -15,6 +15,8 @@ const invoiceRoutes = require('./routes/invoice.routes');
 const paymentRoutes = require('./routes/payment.routes');
 const adminRoutes = require('./routes/admin.routes');
 const userRoutes = require('./routes/user.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
+const reportsRoutes = require('./routes/reports.routes');
 const { startJobs } = require('./jobs');
 
 const app = express();
@@ -63,6 +65,8 @@ app.use('/api/invoices', invoiceRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // ─── Start Cron Jobs ───────────────────────────────────────────────────────────
 startJobs();

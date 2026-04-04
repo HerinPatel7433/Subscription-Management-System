@@ -75,9 +75,9 @@ export default function PaymentsPage() {
     setBalanceLoading(true)
     getInvoiceBalance()
       .then((r) => {
-        const entry = r.data.find((b) => b.invoice_id === selectedInvoiceId)
+        const entry = r.data.find((b) => b.invoiceId === selectedInvoiceId)
         const inv = invoices.find((i) => i.id === selectedInvoiceId)
-        setOutstanding(entry?.outstanding ?? inv?.amount ?? null)
+        setOutstanding(entry?.balanceDue ?? inv?.amount ?? null)
       })
       .catch(() => {
         const inv = invoices.find((i) => i.id === selectedInvoiceId)

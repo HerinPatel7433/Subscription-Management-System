@@ -119,6 +119,45 @@ async function generateInvoiceLogic(subscriptionId) {
   return invoice;
 }
 
+// ─── POST /api/invoices/generate-all ───────────────────────────────────────────
+
+/**
+ * @route   POST /api/invoices/generate-all
+ * @desc    Trigger invoice generation for every active subscription
+ * @access  Admin, Internal
+ */
+async function generateAll(req, res) {
+  try {
+    const activeSubscriptions = await prisma.subscription.findMany({
+      where: { status: 'active', deletedAt: null },
+      select: { id: true },
+    });
+
+    const results = [];
+    const errors = [];
+
+    await Promise.allSettled(
+      activeSubscriptions.map(async (sub) => {
+        try {
+          const invoice = await generateInvoiceLogic(sub.id);
+          results.push({ subscriptionId: sub.id, invoiceId: invoice.id, status: 'generated' });
+        } catch (err) {
+          errors.push({ subscriptionId: sub.id, error: err.message });
+        }
+      })
+    );
+
+    return res.status(207).json({
+      success: true,
+      message: `Billing job complete. Generated: ${results.length}, Failed: ${errors.length}.`,
+      data: { generated: results, failed: errors },
+    });
+  } catch (error) {
+    console.error('generateAll error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+}
+
 // ─── POST /api/invoices/generate/:subscriptionId ──────────────────────────────
 
 /**
@@ -369,6 +408,7 @@ async function printInvoice(req, res) {
 
 module.exports = {
   generateInvoice,
+  generateAll,
   listInvoices,
   getInvoice,
   confirmInvoice,
