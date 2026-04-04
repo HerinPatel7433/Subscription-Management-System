@@ -9,6 +9,7 @@ const {
   createTax,
   updateTax,
   deleteTax,
+  toggleTax,
 } = require('../controllers/tax.controller');
 
 const router = Router();
@@ -41,6 +42,7 @@ router.get('/:id', verifyToken, checkRole('admin', 'internal'), getTax);
 // Admin only
 router.post('/', verifyToken, checkRole('admin'), taxValidation, createTax);
 router.put('/:id', verifyToken, checkRole('admin'), taxUpdateValidation, updateTax);
+router.patch('/:id/toggle', verifyToken, checkRole('admin'), toggleTax);
 router.delete('/:id', verifyToken, checkRole('admin'), deleteTax);
 
 module.exports = router;

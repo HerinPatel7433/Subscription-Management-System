@@ -196,6 +196,38 @@ async function deleteTax(req, res) {
   }
 }
 
+// ─── PATCH /api/taxes/:id/toggle ─────────────────────────────────────────────
+
+/**
+ * @route   PATCH /api/taxes/:id/toggle
+ * @desc    Toggle active status of a tax
+ * @access  Admin only
+ */
+async function toggleTax(req, res) {
+  const { id } = req.params;
+
+  try {
+    const existing = await prisma.tax.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ success: false, message: 'Tax not found.' });
+    }
+
+    const tax = await prisma.tax.update({
+      where: { id },
+      data: { isActive: !existing.isActive },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: formatTax(tax),
+      message: `Tax ${tax.isActive ? 'activated' : 'deactivated'} successfully.`,
+    });
+  } catch (error) {
+    console.error('toggleTax error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+}
+
 module.exports = {
   listTaxes,
   listActiveTaxes,
@@ -203,4 +235,5 @@ module.exports = {
   createTax,
   updateTax,
   deleteTax,
+  toggleTax,
 };
