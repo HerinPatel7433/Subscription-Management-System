@@ -1,0 +1,57 @@
+# render.yaml — Render Blueprint for the SMS backend
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Usage:
+#   1. Push this file to your repo root (or keep in server/)
+#   2. In Render dashboard → New → Blueprint → select your repo
+#   3. Set the secret env vars marked below in the Render dashboard
+
+services:
+  - type: web
+    name: sms-backend
+    runtime: node
+    region: oregon          # free-tier region
+    plan: free
+    rootDir: server         # Render runs commands from here
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+
+    envVars:
+      # ── Static / non-secret values ──────────────────────────────────────────
+      - key: NODE_ENV
+        value: production
+
+      - key: JWT_EXPIRES_IN
+        value: 7d
+
+      - key: BCRYPT_ROUNDS
+        value: "12"
+
+      - key: SMTP_PORT
+        value: "587"
+
+      # ── Secrets — set these in the Render dashboard (Environment tab) ────────
+      # DATABASE_URL   → from Supabase: Settings → Database → Connection string
+      #                  Use the "Transaction" pooler (port 6543) with:
+      #                  ?pgbouncer=true&connection_limit=1
+      - key: DATABASE_URL
+        sync: false         # marks it as a secret to fill in dashboard
+
+      - key: JWT_SECRET
+        sync: false         # generate with: openssl rand -base64 32
+
+      - key: CLIENT_URL
+        sync: false         # e.g. https://your-app.vercel.app (comma-separate multiple)
+
+      - key: EMAIL_HOST
+        sync: false         # smtp.gmail.com  (or smtp.sendgrid.net)
+
+      - key: SMTP_USER
+        sync: false         # your Gmail address
+
+      - key: SMTP_PASS
+        sync: false         # Gmail App Password (16-char, no spaces)
+
+      - key: EMAIL_FROM
+        sync: false         # e.g.  SMS No-Reply <noreply@yourdomain.com>

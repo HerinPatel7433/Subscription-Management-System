@@ -19,22 +19,35 @@ const { startJobs } = require('./jobs');
 const app = express();
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
+// Support comma-separated origins e.g. "https://sms.vercel.app,http://localhost:5173"
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim());
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Render health checks)
+      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// Morgan: 'dev' locally, 'combined' in production for structured logs
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 // ─── Health Check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok', message: 'SMS API is running' });
+  res.status(200).json({
+    status: 'ok',
+    message: 'SMS API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  });
 });
 
 // ─── Routes ────────────────────────────────────────────────────────────────────
