@@ -119,17 +119,17 @@ export default function PaymentsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#131929] border border-slate-700/50 rounded-2xl overflow-hidden">
+      <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-700/50">
+              <tr className="border-b border-[#2F2F2F]">
                 {['Invoice Ref', 'Customer', 'Method', 'Amount', 'Date'].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30">
+            <tbody className="divide-y divide-[#2F2F2F]">
               {loading ? (
                 <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-500">Loading…</td></tr>
               ) : payments.length === 0 ? (

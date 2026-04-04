@@ -33,7 +33,7 @@ const STATUS_BADGE: Record<string, string> = {
   pending:   'bg-amber-500/20 text-amber-300 border-amber-500/30',
 }
 
-const PIE_COLORS = ['#10b981', '#6366f1', '#f59e0b', '#8b5cf6', '#64748b']
+const PIE_COLORS = ['#E50914', '#b81d24', '#564d4d', '#2f2f2f', '#181818']
 
 // ── Skeleton loader ───────────────────────────────────────────────────
 function Skeleton({ className = '' }: { className?: string }) {
@@ -44,9 +44,9 @@ function Skeleton({ className = '' }: { className?: string }) {
 const RevenueTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
     return (
-      <div className="bg-[#1e293b] border border-slate-700/60 rounded-xl px-4 py-2.5 shadow-2xl">
+      <div className="bg-[#181818] border border-[#2F2F2F] rounded-xl px-4 py-2.5 shadow-2xl">
         <p className="text-xs text-slate-400 mb-1">{label}</p>
-        <p className="text-base font-bold text-emerald-400">₹{payload[0].value.toLocaleString()}</p>
+        <p className="text-base font-bold text-white">₹{payload[0].value.toLocaleString()}</p>
       </div>
     )
   }
@@ -57,7 +57,7 @@ const RevenueTooltip = ({ active, payload, label }: { active?: boolean; payload?
 const PieTooltip = ({ active, payload }: { active?: boolean; payload?: { name: string; value: number }[] }) => {
   if (active && payload?.length) {
     return (
-      <div className="bg-[#1e293b] border border-slate-700/60 rounded-xl px-4 py-2.5 shadow-2xl">
+      <div className="bg-[#181818] border border-[#2F2F2F] rounded-xl px-4 py-2.5 shadow-2xl">
         <p className="text-xs text-slate-400">{payload[0].name}</p>
         <p className="text-base font-bold text-white">{payload[0].value}</p>
       </div>
@@ -84,7 +84,7 @@ function SummaryCard({
   return (
     <div
       onClick={onClick}
-      className={`bg-[#131929] border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3 transition-all duration-200 hover:border-slate-600/70 ${onClick ? 'cursor-pointer hover:scale-[1.01]' : ''}`}
+      className={`bg-[#141414] border border-[#2F2F2F] rounded-2xl p-5 flex flex-col gap-3 transition-all duration-200 hover:border-[#404040] ${onClick ? 'cursor-pointer hover:scale-[1.01]' : ''}`}
     >
       <div className="flex items-center justify-between">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconClass}`}>
@@ -256,7 +256,7 @@ export default function DashboardPage() {
             <button
               onClick={() => navigate('/subscriptions')}
               id="btn-new-subscription"
-              className="flex items-center gap-1.5 px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-xl transition-all duration-200 shadow-glow hover:shadow-[0_0_24px_rgba(99,102,241,0.5)]"
+              className="flex items-center gap-1.5 px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white text-xs font-medium rounded-xl transition-all duration-200 shadow-glow hover:shadow-[0_0_24px_rgba(229,9,20,0.5)]"
             >
               <Plus size={13} /> New Subscription
             </button>
@@ -334,7 +334,7 @@ export default function DashboardPage() {
       )}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Revenue bar chart — takes 2/3 */}
-        <div className="xl:col-span-2 bg-[#131929] border border-slate-700/50 rounded-2xl p-5">
+        <div className="xl:col-span-2 bg-[#141414] border border-[#2F2F2F] rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm font-semibold text-white">Revenue (Last 6 Months)</h2>
@@ -358,7 +358,7 @@ export default function DashboardPage() {
                 <Tooltip content={<RevenueTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
                 <Bar dataKey="revenue" radius={[6, 6, 0, 0]}>
                   {revenue.map((entry, i) => (
-                    <Cell key={i} fill={entry.revenue === maxRevenue ? '#6366f1' : '#4f46e560'} />
+                    <Cell key={i} fill={entry.revenue === maxRevenue ? '#E50914' : '#E5091460'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -367,7 +367,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Subscription status pie — takes 1/3 */}
-        <div className="bg-[#131929] border border-slate-700/50 rounded-2xl p-5">
+        <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl p-5">
           <div className="mb-4">
             <h2 className="text-sm font-semibold text-white">Subscription Status</h2>
             <p className="text-xs text-slate-500 mt-0.5">Distribution by state</p>
@@ -475,8 +475,8 @@ function ActivityTable({
   navigate: (path: string) => void
 }) {
   return (
-    <div className="bg-[#131929] border border-slate-700/50 rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-700/50">
+    <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#2F2F2F]">
         <div className="flex items-center gap-2">
           {icon}
           <h2 className="text-sm font-semibold text-white">{title}</h2>

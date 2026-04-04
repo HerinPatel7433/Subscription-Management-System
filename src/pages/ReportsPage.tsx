@@ -19,9 +19,9 @@ import type { RecurringPlan } from '@/services/subscriptionService'
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#1e293b] border border-slate-700/60 rounded-xl px-4 py-2.5 shadow-2xl">
+      <div className="bg-[#181818] border border-[#2F2F2F] rounded-xl px-4 py-2.5 shadow-2xl">
         <p className="text-xs text-slate-400 mb-1">{label}</p>
-        <p className="text-base font-bold text-emerald-400">₹{payload[0].value.toLocaleString()}</p>
+        <p className="text-base font-bold text-white">₹{payload[0].value.toLocaleString()}</p>
       </div>
     )
   }
@@ -33,7 +33,7 @@ function StatCard({ label, value, icon, color, sub }: {
   label: string; value: string | number; icon: React.ReactNode; color: string; sub?: string
 }) {
   return (
-    <div className="bg-[#131929] border border-slate-700/50 rounded-2xl p-5 flex items-start gap-4">
+    <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl p-5 flex items-start gap-4">
       <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
         {icon}
       </div>
@@ -147,7 +147,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Filter bar */}
-      <div className="flex flex-wrap items-center gap-3 p-4 bg-[#131929] border border-slate-700/50 rounded-2xl">
+      <div className="flex flex-wrap items-center gap-3 p-4 bg-[#141414] border border-[#2F2F2F] rounded-2xl">
         <SlidersHorizontal size={15} className="text-slate-400" />
         <p className="text-xs text-slate-400 font-medium mr-1">Filters:</p>
 
@@ -228,7 +228,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Revenue chart */}
-      <div className="bg-[#131929] border border-slate-700/50 rounded-2xl p-5 space-y-4">
+      <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl p-5 space-y-4">
         <div>
           <h2 className="text-sm font-semibold text-white">Revenue by Month</h2>
           <p className="text-xs text-slate-500 mt-0.5">Last 12 months</p>
@@ -254,7 +254,7 @@ export default function ReportsPage() {
                 {revenue.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.revenue === maxRevenue ? '#6366f1' : '#4f46e580'}
+                    fill={entry.revenue === maxRevenue ? '#E50914' : '#E5091480'}
                   />
                 ))}
               </Bar>
@@ -264,8 +264,8 @@ export default function ReportsPage() {
       </div>
 
       {/* Top customers table */}
-      <div className="bg-[#131929] border border-slate-700/50 rounded-2xl overflow-hidden">
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-slate-700/50">
+      <div className="bg-[#141414] border border-[#2F2F2F] rounded-2xl overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-[#2F2F2F]">
           <Users size={16} className="text-slate-400" />
           <h2 className="text-sm font-semibold text-white">Top Customers by Subscription Value</h2>
         </div>
