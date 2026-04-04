@@ -67,17 +67,19 @@ function ToastItem({ toast, onDismiss }: { toast: ToastMessage; onDismiss: (id: 
 }
 
 // ── Hook ─────────────────────────────────────────────────────────────
+import { useCallback } from 'react'
 
 export function useToast() {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
 
-  const show = (type: ToastType, message: string) => {
+  const show = useCallback((type: ToastType, message: string) => {
     const id = Math.random().toString(36).slice(2)
     setToasts((prev) => [...prev, { id, type, message }])
-  }
+  }, [])
 
-  const dismiss = (id: string) =>
+  const dismiss = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id))
+  }, [])
 
   return { toasts, toast: show, dismiss }
 }
