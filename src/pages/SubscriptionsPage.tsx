@@ -75,12 +75,16 @@ export default function SubscriptionsPage() {
     const tmpl = templates.find((t) => t.id === templateId)
     if (!tmpl) return
     setOrderLines(
-      (tmpl.lines ?? []).map((l) => ({
-        product_id: l.product_id,
-        quantity: l.quantity,
-        unit_price: l.unit_price,
-        amount: l.quantity * l.unit_price,
-      }))
+      (tmpl.lines ?? []).map((l) => {
+        const productId = l.product_id ?? l.productId ?? ''
+        const unitPrice = l.unit_price ?? l.unitPrice ?? 0
+        return {
+          product_id: productId,
+          quantity: l.quantity,
+          unit_price: unitPrice,
+          amount: l.quantity * unitPrice,
+        }
+      })
     )
   }
 

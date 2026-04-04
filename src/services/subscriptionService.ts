@@ -62,9 +62,25 @@ export interface Subscription {
 export interface QuotationTemplate {
   id: string
   name: string
-  validity_days: number
-  plan_id: string
-  lines?: { product_id: string; quantity: number; unit_price: number }[]
+  validityDays?: number      // Prisma camelCase
+  validity_days?: number     // snake_case fallback
+  planId?: string            // Prisma camelCase
+  plan_id?: string           // snake_case fallback
+  plan?: {
+    id: string
+    name: string
+    billingPeriod: string
+    price: number
+  }
+  lines?: {
+    id?: string
+    product_id?: string
+    productId?: string
+    product?: { id: string; name: string; type: string }
+    quantity: number
+    unit_price?: number
+    unitPrice?: number
+  }[]
 }
 
 export interface User {
@@ -110,7 +126,27 @@ export const generateInvoice = (id: string) =>
 
 // ── Quotation Templates ───────────────────────────────────────────────
 
-export const getTemplates = () => api.get<QuotationTemplate[]>('/quotation-templates')
+export const getTemplates = () => api.get<QuotationTemplate[]>('/templates')
+
+export const getTemplate = (id: string) =>
+  api.get<QuotationTemplate>(`/templates/${id}`)
+
+export const createTemplate = (data: Partial<QuotationTemplate>) =>
+  api.post<QuotationTemplate>('/templates', data)
+
+export const updateTemplate = (id: string, data: Partial<QuotationTemplate>) =>
+  api.put<QuotationTemplate>(`/templates/${id}`, data)
+
+export const deleteTemplate = (id: string) =>
+  api.delete(`/templates/${id}`)
+
+export const addTemplateLine = (
+  templateId: string,
+  data: { product_id: string; quantity: number; unit_price: number }
+) => api.post(`/templates/${templateId}/lines`, data)
+
+export const deleteTemplateLine = (templateId: string, lineId: string) =>
+  api.delete(`/templates/${templateId}/lines/${lineId}`)
 
 // ── Users ─────────────────────────────────────────────────────────────
 
