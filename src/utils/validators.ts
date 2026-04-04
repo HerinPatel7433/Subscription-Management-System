@@ -37,7 +37,7 @@ export function isValidEmail(email: string): boolean {
 export const PASSWORD_RULES = {
   minLength: 8,
   requireUppercase: true,
-  requireNumber: true,
+  requireLowercase: true,
   requireSpecial: true,
 }
 
@@ -47,8 +47,8 @@ export function getPasswordErrors(password: string): string[] {
     errors.push(`At least ${PASSWORD_RULES.minLength} characters`)
   if (PASSWORD_RULES.requireUppercase && !/[A-Z]/.test(password))
     errors.push('At least one uppercase letter')
-  if (PASSWORD_RULES.requireNumber && !/[0-9]/.test(password))
-    errors.push('At least one number')
+  if (PASSWORD_RULES.requireLowercase && !/[a-z]/.test(password))
+    errors.push('At least one lowercase letter')
   if (PASSWORD_RULES.requireSpecial && !/[^a-zA-Z0-9]/.test(password))
     errors.push('At least one special character')
   return errors

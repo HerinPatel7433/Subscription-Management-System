@@ -17,7 +17,7 @@ const schema = z
       .string()
       .min(8, 'At least 8 characters')
       .regex(/[A-Z]/, 'At least one uppercase letter')
-      .regex(/[0-9]/, 'At least one number')
+      .regex(/[a-z]/, 'At least one lowercase letter')
       .regex(/[^a-zA-Z0-9]/, 'At least one special character'),
     confirmPassword: z.string(),
   })
@@ -52,8 +52,11 @@ export default function SignupPage() {
       setUser(res.user)
       navigate(res.user.role === 'admin' ? '/dashboard' : '/my-subscriptions', { replace: true })
     } catch (err: unknown) {
-      const apiErr = err as { response?: { data?: { detail?: string } } }
-      const msg = apiErr?.response?.data?.detail ?? 'Registration failed. Please try again.'
+      const axiosErr = err as { response?: { data?: { message?: string } }; message?: string }
+      const msg =
+        axiosErr?.response?.data?.message ??
+        axiosErr?.message ??
+        'Registration failed. Please try again later.'
       setServerError(msg)
     }
   }
@@ -154,7 +157,7 @@ export default function SignupPage() {
               {/* Rules checklist */}
               {passwordValue && pwErrors.length > 0 && (
                 <ul className="mt-2 space-y-1">
-                  {['At least 8 characters', 'At least one uppercase letter', 'At least one number', 'At least one special character'].map((rule) => {
+                  {['At least 8 characters', 'At least one uppercase letter', 'At least one lowercase letter', 'At least one special character'].map((rule) => {
                     const met = !pwErrors.includes(rule)
                     return (
                       <li key={rule} className={`flex items-center gap-1.5 text-[11px] ${met ? 'text-green-400' : 'text-slate-500'}`}>
