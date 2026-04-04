@@ -188,7 +188,13 @@ export default function PaymentsPage() {
               type="number" step="0.01" min="0.01"
               className={`form-input ${errors.amount ? 'error' : ''}`}
               placeholder="0.00"
-              {...register('amount', { required: 'Required', min: { value: 0.01, message: 'Must be > 0' } })}
+              {...register('amount', {
+                required: 'Required',
+                min: { value: 0.01, message: 'Must be > 0' },
+                max: outstanding !== null 
+                  ? { value: outstanding, message: `Amount exceeds outstanding balance of ₹${outstanding.toLocaleString()}` }
+                  : undefined
+              })}
             />
             {errors.amount && <p className="field-error">{errors.amount.message}</p>}
           </div>
