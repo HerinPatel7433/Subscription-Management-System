@@ -170,7 +170,21 @@ export default function InvoicesPage() {
                     </td>
                     <td className="px-4 py-3 text-slate-400 text-xs">{inv.due_date}</td>
                     <td className="px-4 py-3">
-                      <Eye size={14} className="text-slate-500 hover:text-primary-400 transition-colors" />
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handlePdf(inv.id, inv.invoice_number)
+                          }}
+                          className="text-slate-500 hover:text-sky-400 transition-colors"
+                          title="Download PDF"
+                        >
+                          <Download size={14} />
+                        </button>
+                        <span className="text-slate-500 hover:text-primary-400 transition-colors" title="View Details">
+                          <Eye size={14} />
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))}

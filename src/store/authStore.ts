@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type UserRole = 'admin' | 'portal'
+export type UserRole = 'admin' | 'internal' | 'portal'
 
 export interface AuthUser {
   id: string

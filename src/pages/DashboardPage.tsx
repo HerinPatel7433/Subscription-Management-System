@@ -383,7 +383,7 @@ export default function DashboardPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis
-                  tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
+                  tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`}
                   tick={{ fill: '#64748b', fontSize: 11 }}
                   axisLine={false} tickLine={false} width={48}
                 />
@@ -425,7 +425,7 @@ export default function DashboardPage() {
                 <Legend
                   iconType="circle"
                   iconSize={8}
-                  formatter={(val) => <span style={{ color: '#94a3b8', fontSize: 11 }}>{val}</span>}
+                  formatter={(val: string | number) => <span style={{ color: '#94a3b8', fontSize: 11 }}>{val}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>

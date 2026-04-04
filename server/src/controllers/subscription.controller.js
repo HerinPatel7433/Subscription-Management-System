@@ -473,21 +473,22 @@ const activateSubscription = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Subscription not found.' });
     }
 
-    // Must be in quotation or confirmed to activate
-    if (!['quotation', 'confirmed'].includes(subscription.status)) {
+    // Check if we can reach 'active' (either directly or via 'confirmed')
+    let allowed = false;
+    if (canTransition(subscription.status, 'active')) {
+      allowed = true;
+    } else if (canTransition(subscription.status, 'confirmed') && canTransition('confirmed', 'active')) {
+      allowed = true;
+    }
+
+    if (!allowed) {
       return res.status(400).json({
         success: false,
-        message: `Invalid status transition. '/activate' requires status 'quotation' or 'confirmed'. Current: '${subscription.status}'.`,
+        message: `Invalid status transition. Cannot reach 'active' from '${subscription.status}'.`,
       });
     }
 
-    // If quotation → confirmed → active (two hops, atomic)
-    let targetStatus;
-    if (subscription.status === 'quotation') {
-      targetStatus = 'active'; // jump through confirmed → active atomically
-    } else {
-      targetStatus = 'active'; // confirmed → active
-    }
+    const targetStatus = 'active';
 
     const updated = await prisma.subscription.update({
       where: { id },

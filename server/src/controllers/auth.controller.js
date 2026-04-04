@@ -63,7 +63,7 @@ async function signup(req, res) {
   // Manual password strength check (belt-and-suspenders)
   const passwordError = validatePasswordStrength(password);
   if (passwordError) {
-    return res.status(400).json({ success: false, message: passwordError });
+    return res.status(422).json({ success: false, message: passwordError });
   }
 
   try {
@@ -237,7 +237,7 @@ async function confirmPasswordReset(req, res) {
   // Check password strength
   const passwordError = validatePasswordStrength(password);
   if (passwordError) {
-    return res.status(400).json({ success: false, message: passwordError });
+    return res.status(422).json({ success: false, message: passwordError });
   }
 
   try {

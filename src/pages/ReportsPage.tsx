@@ -270,7 +270,7 @@ export default function ReportsPage() {
                 axisLine={false} tickLine={false}
               />
               <YAxis
-                tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`}
+                tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`}
                 tick={{ fill: '#64748b', fontSize: 11 }}
                 axisLine={false} tickLine={false} width={52}
               />

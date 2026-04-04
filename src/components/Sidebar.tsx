@@ -10,14 +10,14 @@ interface NavItem {
   label: string
   path: string
   icon: React.ReactNode
-  roles: ('admin' | 'portal')[]
+  roles: ('admin' | 'internal' | 'portal')[]
 }
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard',     path: '/dashboard',         icon: <LayoutDashboard size={18} />, roles: ['admin'] },
-  { label: 'Products',      path: '/products',          icon: <Package size={18} />,         roles: ['admin'] },
-  { label: 'Plans',         path: '/plans',             icon: <CreditCard size={18} />,      roles: ['admin'] },
-  { label: 'Subscriptions', path: '/subscriptions',     icon: <RefreshCw size={18} />,       roles: ['admin'] },
+  { label: 'Products',      path: '/products',          icon: <Package size={18} />,         roles: ['admin', 'internal'] },
+  { label: 'Plans',         path: '/plans',             icon: <CreditCard size={18} />,      roles: ['admin', 'internal'] },
+  { label: 'Subscriptions', path: '/subscriptions',     icon: <RefreshCw size={18} />,       roles: ['admin', 'internal'] },
   { label: 'My Subscriptions', path: '/my-subscriptions', icon: <RefreshCw size={18} />,    roles: ['portal'] },
   { label: 'Invoices',      path: '/invoices',          icon: <FileText size={18} />,        roles: ['admin', 'portal'] },
   { label: 'Payments',      path: '/payments',          icon: <Wallet size={18} />,          roles: ['admin'] },
@@ -50,7 +50,7 @@ export default function Sidebar() {
         <div>
           <p className="text-sm font-bold text-white leading-tight">SubsManager</p>
           <p className="text-[10px] text-slate-500 uppercase tracking-wider">
-            {user?.role === 'admin' ? 'Admin Panel' : 'My Portal'}
+            {user?.role === 'admin' ? 'Admin Panel' : user?.role === 'internal' ? 'Internal Portal' : 'My Portal'}
           </p>
         </div>
       </div>

@@ -18,8 +18,8 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
 
   // Role check
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    // Admin always goes to dashboard; portal users go to subscriptions
-    const fallback = user.role === 'admin' ? '/dashboard' : '/my-subscriptions'
+    // Admin and internal go to dashboard/products, portal users go to subscriptions
+    const fallback = user.role === 'portal' ? '/my-subscriptions' : '/products'
     return <Navigate to={fallback} replace />
   }
 

@@ -6,6 +6,21 @@ const nodemailer = require('nodemailer');
  * Uses SMTP environment variables.
  */
 function createTransporter() {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    return {
+      sendMail: async (mailOptions) => {
+        console.log(`\n======================================================`);
+        console.log(`📧 MOCK EMAIL SENT`);
+        console.log(`To: ${mailOptions.to}`);
+        console.log(`Subject: ${mailOptions.subject}`);
+        if (mailOptions.text && mailOptions.text.includes('http')) {
+          console.log(`Link: ${mailOptions.text.split('\\n').find(line => line.includes('http'))}`);
+        }
+        console.log(`======================================================\n`);
+      }
+    };
+  }
+
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT || '587', 10),

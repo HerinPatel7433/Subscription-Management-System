@@ -24,6 +24,14 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   )
 }
 
+function InternalRoute({ children }: { children: React.ReactNode }) {
+  return (
+    <ProtectedRoute allowedRoles={['admin', 'internal']}>
+      <Layout>{children}</Layout>
+    </ProtectedRoute>
+  )
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -35,10 +43,10 @@ export default function App() {
 
         {/* Admin-only routes */}
         <Route path="/dashboard"         element={<AdminRoute><DashboardPage /></AdminRoute>} />
-        <Route path="/products"          element={<AdminRoute><ProductsPage /></AdminRoute>} />
-        <Route path="/plans"             element={<AdminRoute><PlansPage /></AdminRoute>} />
-        <Route path="/subscriptions"     element={<AdminRoute><SubscriptionsPage /></AdminRoute>} />
-        <Route path="/subscriptions/:id" element={<AdminRoute><SubscriptionDetailPage /></AdminRoute>} />
+        <Route path="/products"          element={<InternalRoute><ProductsPage /></InternalRoute>} />
+        <Route path="/plans"             element={<InternalRoute><PlansPage /></InternalRoute>} />
+        <Route path="/subscriptions"     element={<InternalRoute><SubscriptionsPage /></InternalRoute>} />
+        <Route path="/subscriptions/:id" element={<InternalRoute><SubscriptionDetailPage /></InternalRoute>} />
         <Route path="/payments"          element={<AdminRoute><PaymentsPage /></AdminRoute>} />
         <Route path="/discounts"         element={<AdminRoute><DiscountsPage /></AdminRoute>} />
         <Route path="/taxes"             element={<AdminRoute><TaxesPage /></AdminRoute>} />
