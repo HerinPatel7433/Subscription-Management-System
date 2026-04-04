@@ -13,6 +13,7 @@ import PaymentsPage from '@/pages/PaymentsPage'
 import DiscountsPage from '@/pages/DiscountsPage'
 import TaxesPage from '@/pages/TaxesPage'
 import ReportsPage from '@/pages/ReportsPage'
+import UsersPage from '@/pages/UsersPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import Layout from '@/components/Layout'
 
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/discounts"         element={<AdminRoute><DiscountsPage /></AdminRoute>} />
         <Route path="/taxes"             element={<AdminRoute><TaxesPage /></AdminRoute>} />
         <Route path="/reports"           element={<AdminRoute><ReportsPage /></AdminRoute>} />
+        <Route path="/users"             element={<AdminRoute><UsersPage /></AdminRoute>} />
 
         {/* Portal + Admin routes */}
         <Route

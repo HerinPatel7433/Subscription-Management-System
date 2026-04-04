@@ -173,3 +173,4 @@ export const deleteTemplateLine = (templateId: string, lineId: string) =>
 // ── Users ─────────────────────────────────────────────────────────────
 
 export const getUsers = () => api.get<User[]>('/users')
+export const createUser = (data: Partial<User> & { password?: string }) => api.post<User>('/users', data)
