@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes');
 const planRoutes = require('./routes/plan.routes');
+const templateRoutes = require('./routes/template.routes');
+const subscriptionRoutes = require('./routes/subscription.routes');
 
 const app = express();
 
@@ -33,6 +35,8 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/plans', planRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
