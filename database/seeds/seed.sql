@@ -15,21 +15,21 @@ INSERT INTO users (id, name, email, password_hash, role) VALUES
     'a1000000-0000-0000-0000-000000000001',
     'Alice Admin',
     'alice.admin@sms.dev',
-    '$2b$10$KIXHs3JAt7Wz5G1MqW8rUODzVW3Qn9N6Py1sQ0Rp7Th2LyXvJekC',  -- Password@123
+    '$2a$10$l96P3xojTTq5M9Q.IoyKiePyVrfRBMvxfPHX6Qy9MY3qRCggAFRgq',  -- Password@123
     'admin'
   ),
   (
     'a1000000-0000-0000-0000-000000000002',
     'Bob Internal',
     'bob.internal@sms.dev',
-    '$2b$10$KIXHs3JAt7Wz5G1MqW8rUODzVW3Qn9N6Py1sQ0Rp7Th2LyXvJekC',
+    '$2a$10$l96P3xojTTq5M9Q.IoyKiePyVrfRBMvxfPHX6Qy9MY3qRCggAFRgq',
     'internal'
   ),
   (
     'a1000000-0000-0000-0000-000000000003',
     'Carol Portal',
     'carol.portal@sms.dev',
-    '$2b$10$KIXHs3JAt7Wz5G1MqW8rUODzVW3Qn9N6Py1sQ0Rp7Th2LyXvJekC',
+    '$2a$10$l96P3xojTTq5M9Q.IoyKiePyVrfRBMvxfPHX6Qy9MY3qRCggAFRgq',
     'portal'
   );
 
