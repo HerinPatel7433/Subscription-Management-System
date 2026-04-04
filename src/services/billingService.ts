@@ -170,3 +170,35 @@ export const getRevenueByMonth = (params?: Record<string, string>) =>
 
 export const getTopCustomers = (params?: Record<string, string>) =>
   api.get<TopCustomer[]>('/reports/top-customers', { params })
+
+// ── Dashboard Activity Types ──────────────────────────────────────────
+
+export interface DashboardActivity {
+  id: string
+  type: 'subscription' | 'invoice'
+  title: string
+  subtitle: string
+  status: string
+  amount?: number
+  date: string
+  link: string
+}
+
+export interface SubscriptionStatusBreakdown {
+  active: number
+  draft: number
+  closed: number
+  confirmed: number
+  quotation: number
+}
+
+// ── Dashboard API ─────────────────────────────────────────────────────
+
+export const getDashboardActivity = () =>
+  api.get<DashboardActivity[]>('/dashboard/activity')
+
+export const getSubscriptionStatusBreakdown = () =>
+  api.get<SubscriptionStatusBreakdown>('/dashboard/subscription-status')
+
+export const triggerBillingJob = () =>
+  api.post('/invoices/generate-all')
