@@ -1,0 +1,683 @@
+{
+  "info": {
+    "_postman_id": "sms-api-collection-v1",
+    "name": "Subscription Management System — API",
+    "description": "Complete REST API collection for the Subscription Management System.\n\n## Setup\n1. Set the `base_url` variable to `http://localhost:5000`\n2. Run **Auth > Signup** or **Auth > Login** — the token is auto-saved to `jwt_token`\n3. All protected requests use `{{jwt_token}}` automatically via collection auth\n\n## Variables\n- `base_url` — API base URL (default: http://localhost:5000)\n- `jwt_token` — auto-populated by login/signup scripts\n- `product_id` — auto-populated by Create Product\n- `variant_id` — auto-populated by Add Variant\n- `plan_id` — auto-populated by Create Plan",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000", "type": "string" },
+    { "key": "jwt_token", "value": "", "type": "string" },
+    { "key": "product_id", "value": "", "type": "string" },
+    { "key": "variant_id", "value": "", "type": "string" },
+    { "key": "plan_id", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{jwt_token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('jwt_token', body.token);",
+                  "  pm.test('Signup successful', () => pm.response.to.have.status(201));",
+                  "  pm.test('Token returned', () => pm.expect(body.token).to.be.a('string'));",
+                  "  pm.test('Password not exposed', () => pm.expect(body.user.passwordHash).to.be.undefined);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teesh Patel\",\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"Admin@1234\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/signup", "host": ["{{base_url}}"], "path": ["api", "auth", "signup"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('jwt_token', body.token);",
+                  "  pm.test('Login successful', () => pm.response.to.have.status(200));",
+                  "  pm.test('Token returned', () => pm.expect(body.token).to.be.a('string'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"Admin@1234\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login — Invalid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Error message present', () => pm.expect(pm.response.json().message).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teesh@sms.com\",\n  \"password\": \"WrongPassword!\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Signup — Weak Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Validation errors present', () => pm.expect(pm.response.json().errors).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"weak@sms.com\",\n  \"password\": \"short\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/signup", "host": ["{{base_url}}"], "path": ["api", "auth", "signup"] }
+          }
+        },
+        {
+          "name": "Request Password Reset",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teesh@sms.com\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/reset-password/request", "host": ["{{base_url}}"], "path": ["api", "auth", "reset-password", "request"] }
+          }
+        },
+        {
+          "name": "Confirm Password Reset",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"PASTE_TOKEN_FROM_EMAIL_HERE\",\n  \"password\": \"NewAdmin@5678\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/reset-password/confirm", "host": ["{{base_url}}"], "path": ["api", "auth", "reset-password", "confirm"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Products",
+      "item": [
+        {
+          "name": "List All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                  "pm.test('success flag true', () => pm.expect(pm.response.json().success).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('product_id', body.data.id);",
+                  "  pm.test('Returns 201', () => pm.response.to.have.status(201));",
+                  "  pm.test('ID set', () => pm.expect(body.data.id).to.be.a('string'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Enterprise License\",\n  \"type\": \"service\",\n  \"sales_price\": 299.99,\n  \"cost_price\": 150.00\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Get Single Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data has id', () => pm.expect(pm.response.json().data.id).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Get Product — Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/00000000-0000-0000-0000-000000000000", "host": ["{{base_url}}"], "path": ["api", "products", "00000000-0000-0000-0000-000000000000"] }
+          }
+        },
+        {
+          "name": "Update Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name updated', () => pm.expect(pm.response.json().data.name).to.equal('Enterprise License Pro'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Enterprise License Pro\",\n  \"sales_price\": 349.99\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Create Product — Validation Error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Errors array present', () => pm.expect(pm.response.json().errors).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"type\": \"service\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data is null', () => pm.expect(pm.response.json().data).to.be.null);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔧 Product Variants",
+      "item": [
+        {
+          "name": "Setup — Create Product for Variants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('product_id', pm.response.json().data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cloud Storage\",\n  \"type\": \"service\",\n  \"sales_price\": 19.99,\n  \"cost_price\": 5.00\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "List Product Variants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+          }
+        },
+        {
+          "name": "Add Variant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('variant_id', body.data.id);",
+                  "  pm.test('Returns 201', () => pm.response.to.have.status(201));",
+                  "  pm.test('extraPrice is number', () => pm.expect(body.data.extraPrice).to.be.a('number'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attribute\": \"storage\",\n  \"value\": \"100GB\",\n  \"extra_price\": 5.00\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+          }
+        },
+        {
+          "name": "Update Variant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"value\": \"200GB\",\n  \"extra_price\": 9.99\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants", "{{variant_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Variant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants/{{variant_id}}", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants", "{{variant_id}}"] }
+          }
+        },
+        {
+          "name": "Add Variant — Validation Error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attribute\": \"\",\n  \"extra_price\": -5\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products/{{product_id}}/variants", "host": ["{{base_url}}"], "path": ["api", "products", "{{product_id}}", "variants"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Recurring Plans",
+      "item": [
+        {
+          "name": "List All Plans",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+          }
+        },
+        {
+          "name": "Create Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('plan_id', body.data.id);",
+                  "  pm.test('Returns 201', () => pm.response.to.have.status(201));",
+                  "  pm.test('price is number', () => pm.expect(body.data.price).to.be.a('number'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pro Monthly\",\n  \"price\": 49.99,\n  \"billing_period\": \"monthly\",\n  \"min_qty\": 1,\n  \"start_date\": \"2026-01-01\",\n  \"end_date\": \"2026-12-31\",\n  \"auto_close\": false,\n  \"closable\": true,\n  \"pausable\": true,\n  \"renewable\": true\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+          }
+        },
+        {
+          "name": "Create Plan — Invalid Billing Period",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Errors present', () => pm.expect(pm.response.json().errors).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bad Plan\",\n  \"price\": 9.99,\n  \"billing_period\": \"biannual\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+          }
+        },
+        {
+          "name": "Create Plan — end_date before start_date",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Date error message', () => pm.expect(pm.response.json().message).to.include('end_date'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bad Dates Plan\",\n  \"price\": 9.99,\n  \"billing_period\": \"monthly\",\n  \"start_date\": \"2026-12-31\",\n  \"end_date\": \"2026-01-01\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/plans", "host": ["{{base_url}}"], "path": ["api", "plans"] }
+          }
+        },
+        {
+          "name": "Get Single Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data has id', () => pm.expect(pm.response.json().data.id).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+          }
+        },
+        {
+          "name": "Get Plan — Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/plans/00000000-0000-0000-0000-000000000000", "host": ["{{base_url}}"], "path": ["api", "plans", "00000000-0000-0000-0000-000000000000"] }
+          }
+        },
+        {
+          "name": "Update Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Price updated', () => pm.expect(pm.response.json().data.price).to.equal(59.99));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 59.99,\n  \"pausable\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Plan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Data is null', () => pm.expect(pm.response.json().data).to.be.null);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/plans/{{plan_id}}", "host": ["{{base_url}}"], "path": ["api", "plans", "{{plan_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Auth Guard Tests",
+      "item": [
+        {
+          "name": "No Token — 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 401 without token', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Wrong Role — 403",
+          "description": "Uses a portal-role token to hit an admin-only endpoint. Manually paste a portal-user token in the Authorization header to test.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Returns 403 for wrong role', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "PASTE_PORTAL_ROLE_TOKEN_HERE", "type": "string" }]
+            },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Unauthorized Product\",\n  \"type\": \"service\",\n  \"sales_price\": 10,\n  \"cost_price\": 5\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/products", "host": ["{{base_url}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API is healthy', () => pm.response.to.have.status(200));",
+                  "pm.test('Status ok', () => pm.expect(pm.response.json().status).to.equal('ok'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/health", "host": ["{{base_url}}"], "path": ["api", "health"] }
+          }
+        }
+      ]
+    }
+  ]
+}

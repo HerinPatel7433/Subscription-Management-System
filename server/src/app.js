@@ -5,6 +5,8 @@ const morgan = require('morgan');
 
 // Route imports
 const authRoutes = require('./routes/auth.routes');
+const productRoutes = require('./routes/product.routes');
+const planRoutes = require('./routes/plan.routes');
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.get('/api/health', (_req, res) => {
 
 // ─── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/plans', planRoutes);
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
