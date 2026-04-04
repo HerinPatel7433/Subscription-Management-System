@@ -73,8 +73,12 @@ export default function PaymentsPage() {
   useEffect(() => {
     if (!selectedInvoiceId) { setOutstanding(null); return }
     setBalanceLoading(true)
-    getInvoiceBalance(selectedInvoiceId)
-      .then((r) => setOutstanding(r.data.outstanding))
+    getInvoiceBalance()
+      .then((r) => {
+        const entry = r.data.find((b) => b.invoice_id === selectedInvoiceId)
+        const inv = invoices.find((i) => i.id === selectedInvoiceId)
+        setOutstanding(entry?.outstanding ?? inv?.amount ?? null)
+      })
       .catch(() => {
         const inv = invoices.find((i) => i.id === selectedInvoiceId)
         setOutstanding(inv?.amount ?? null)
