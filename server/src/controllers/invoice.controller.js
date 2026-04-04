@@ -22,6 +22,103 @@ function formatInvoice(i) {
   };
 }
 
+/**
+ * Core logic for invoice generation. Returns the generated invoice object.
+ * @param {string} subscriptionId 
+ * @returns {Promise<Object>}
+ */
+async function generateInvoiceLogic(subscriptionId) {
+  const subscription = await prisma.subscription.findFirst({
+    where: { id: subscriptionId, deletedAt: null },
+    include: {
+      lines: { include: { tax: true } },
+    },
+  });
+
+  if (!subscription) {
+    throw new Error('Subscription not found.');
+  }
+
+  if (subscription.status !== 'active') {
+    throw new Error(`Invoices can only be generated for 'active' subscriptions. Current status: '${subscription.status}'.`);
+  }
+
+  // Prepare line items
+  let globalTotal = 0;
+  const invoiceLinesData = [];
+
+  const discountApps = await prisma.discountApplication.findMany({
+    where: {
+      OR: [
+        { appliesTo: 'subscription', referenceId: subscriptionId },
+        { appliesTo: 'product', referenceId: { in: subscription.lines.map((l) => l.productId) } },
+      ],
+    },
+    include: { discount: true },
+  });
+
+  const prodDiscounts = discountApps.filter((d) => d.appliesTo === 'product');
+  const subDiscounts = discountApps.filter((d) => d.appliesTo === 'subscription');
+
+  for (const line of subscription.lines) {
+    const baseAmount = Number(line.unitPrice) * line.quantity;
+
+    let taxAmount = 0;
+    if (line.tax && line.tax.isActive) {
+      taxAmount = baseAmount * (Number(line.tax.rate) / 100);
+    }
+
+    let discountAmount = 0;
+    const relevantDiscApp = prodDiscounts.find((d) => d.referenceId === line.productId)
+      || subDiscounts[0];
+
+    if (relevantDiscApp && relevantDiscApp.discount) {
+      const d = relevantDiscApp.discount;
+      if (!d.deletedAt && (!d.startDate || new Date(d.startDate) <= new Date()) && (!d.endDate || new Date(d.endDate) >= new Date())) {
+          if (baseAmount >= Number(d.minPurchase) && line.quantity >= d.minQty) {
+            if (d.type === 'percentage') {
+              discountAmount = baseAmount * (Number(d.value) / 100);
+            } else if (d.type === 'fixed') {
+              discountAmount = Number(d.value);
+              if (discountAmount > baseAmount) discountAmount = baseAmount;
+            }
+          }
+      }
+    }
+
+    const lineTotal = baseAmount + taxAmount - discountAmount;
+    globalTotal += lineTotal;
+
+    invoiceLinesData.push({
+      productId: line.productId,
+      quantity: line.quantity,
+      unitPrice: line.unitPrice,
+      taxAmount,
+      discountAmount,
+      lineTotal,
+    });
+  }
+
+  const issuedDate = new Date();
+  const dueDate = new Date();
+  dueDate.setDate(dueDate.getDate() + 15); // Default Net 15
+
+  const invoice = await prisma.invoice.create({
+    data: {
+      subscriptionId: subscription.id,
+      customerId: subscription.customerId,
+      status: 'draft',
+      issuedDate,
+      dueDate,
+      totalAmount: globalTotal,
+      lines: { create: invoiceLinesData },
+    },
+    include: { lines: { include: { product: { select: { name: true } } } } },
+  });
+
+  return invoice;
+}
+
 // ─── POST /api/invoices/generate/:subscriptionId ──────────────────────────────
 
 /**
@@ -33,103 +130,7 @@ async function generateInvoice(req, res) {
   const { subscriptionId } = req.params;
 
   try {
-    const subscription = await prisma.subscription.findFirst({
-      where: { id: subscriptionId, deletedAt: null },
-      include: {
-        lines: { include: { tax: true } },
-      },
-    });
-
-    if (!subscription) {
-      return res.status(404).json({ success: false, message: 'Subscription not found.' });
-    }
-
-    if (subscription.status !== 'active') {
-      return res.status(400).json({
-        success: false,
-        message: `Invoices can only be generated for 'active' subscriptions. Current status: '${subscription.status}'.`,
-      });
-    }
-
-    // Prepare line items
-    let globalTotal = 0;
-    const invoiceLinesData = [];
-
-    // Check discount applicability (if any exist for subscription/products)
-    // Simplify logic: we look for active discounts applied
-    const discountApps = await prisma.discountApplication.findMany({
-      where: {
-        OR: [
-          { appliesTo: 'subscription', referenceId: subscriptionId },
-          { appliesTo: 'product', referenceId: { in: subscription.lines.map((l) => l.productId) } },
-        ],
-      },
-      include: { discount: true },
-    });
-
-    // Map product discounts for quick lookup
-    const prodDiscounts = discountApps.filter((d) => d.appliesTo === 'product');
-    const subDiscounts = discountApps.filter((d) => d.appliesTo === 'subscription');
-
-    for (const line of subscription.lines) {
-      const baseAmount = Number(line.unitPrice) * line.quantity;
-
-      // Tax calculation
-      let taxAmount = 0;
-      if (line.tax && line.tax.isActive) {
-        taxAmount = baseAmount * (Number(line.tax.rate) / 100);
-      }
-
-      // Discount calculation (finding applicable product discount or falling back to sub discount if logic dictates)
-      // We will prefer product-specific discounts on this line, or apply generic subscription discount.
-      let discountAmount = 0;
-      const relevantDiscApp = prodDiscounts.find((d) => d.referenceId === line.productId)
-        || subDiscounts[0]; // If sub-level, we apply to each line? Real implementations vary. Let's apply if found.
-
-      if (relevantDiscApp && relevantDiscApp.discount) {
-        const d = relevantDiscApp.discount;
-        if (!d.deletedAt && (!d.startDate || new Date(d.startDate) <= new Date()) && (!d.endDate || new Date(d.endDate) >= new Date())) {
-           // check minPurchase, minQty
-           if (baseAmount >= Number(d.minPurchase) && line.quantity >= d.minQty) {
-              if (d.type === 'percentage') {
-                discountAmount = baseAmount * (Number(d.value) / 100);
-              } else if (d.type === 'fixed') {
-                discountAmount = Number(d.value); // Usually distributed, but simple fixed here
-                if (discountAmount > baseAmount) discountAmount = baseAmount; // No negative lines
-              }
-           }
-        }
-      }
-
-      const lineTotal = baseAmount + taxAmount - discountAmount;
-      globalTotal += lineTotal;
-
-      invoiceLinesData.push({
-        productId: line.productId,
-        quantity: line.quantity,
-        unitPrice: line.unitPrice,
-        taxAmount,
-        discountAmount,
-        lineTotal,
-      });
-    }
-
-    const issuedDate = new Date();
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 15); // Default Net 15
-
-    const invoice = await prisma.invoice.create({
-      data: {
-        subscriptionId: subscription.id,
-        customerId: subscription.customerId,
-        status: 'draft',
-        issuedDate,
-        dueDate,
-        totalAmount: globalTotal,
-        lines: { create: invoiceLinesData },
-      },
-      include: { lines: { include: { product: { select: { name: true } } } } },
-    });
+    const invoice = await generateInvoiceLogic(subscriptionId);
 
     return res.status(201).json({
       success: true,
@@ -137,10 +138,14 @@ async function generateInvoice(req, res) {
       data: formatInvoice(invoice),
     });
   } catch (error) {
+    if (error.message.includes('not found') || error.message.includes('Current status:')) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
     console.error('generateInvoice error:', error);
     return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 }
+
 
 // ─── GET /api/invoices ────────────────────────────────────────────────────────
 
@@ -370,4 +375,5 @@ module.exports = {
   cancelInvoice,
   sendInvoice,
   printInvoice,
+  generateInvoiceLogic,
 };

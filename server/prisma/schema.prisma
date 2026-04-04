@@ -173,6 +173,7 @@ model Subscription {
   planId             String             @map("plan_id") @db.Uuid
   startDate          DateTime           @map("start_date") @db.Date
   expirationDate     DateTime?          @map("expiration_date") @db.Date
+  nextBillingDate    DateTime?          @map("next_billing_date") @db.Date
   paymentTerms       String?            @map("payment_terms") @db.VarChar(255)
   status             String             @db.VarChar(50)
   createdAt          DateTime           @default(now()) @map("created_at")

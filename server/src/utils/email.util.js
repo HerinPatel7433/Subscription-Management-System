@@ -102,4 +102,57 @@ async function sendInvoiceEmail(toEmail, invoiceId, pdfBuffer) {
   await transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendPasswordResetEmail, sendInvoiceEmail };
+/**
+ * Sends a renewal reminder email.
+ */
+async function sendRenewalReminderEmail(toEmail, subscription) {
+  const transporter = createTransporter();
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || '"SMS Billing" <billing@sms.com>',
+    to: toEmail,
+    subject: `Subscription Renewal Reminder — ID: ${subscription.id}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Subscription Renewal</h2>
+        <p>Dear Customer,</p>
+        <p>Your subscription (ID: ${subscription.id}) has ended and is scheduled for auto-renewal.</p>
+        <p>A new invoice will be generated shortly.</p>
+      </div>
+    `,
+    text: `Your subscription (ID: ${subscription.id}) has ended and is scheduled for auto-renewal.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
+/**
+ * Sends an overdue invoice reminder email.
+ */
+async function sendOverdueReminderEmail(toEmail, invoice) {
+  const transporter = createTransporter();
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || '"SMS Billing" <billing@sms.com>',
+    to: toEmail,
+    subject: `OVERDUE INVOICE — ID: ${invoice.id}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #E53E3E;">Overdue Invoice Reminder</h2>
+        <p>Dear Customer,</p>
+        <p>Your invoice (ID: ${invoice.id}) was due on ${new Date(invoice.dueDate).toLocaleDateString()}.</p>
+        <p>Please arrange payment as soon as possible to avoid service disruption.</p>
+      </div>
+    `,
+    text: `Your invoice (ID: ${invoice.id}) is overdue. Please arrange payment as soon as possible.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
+module.exports = { 
+  sendPasswordResetEmail, 
+  sendInvoiceEmail, 
+  sendRenewalReminderEmail, 
+  sendOverdueReminderEmail,
+};
