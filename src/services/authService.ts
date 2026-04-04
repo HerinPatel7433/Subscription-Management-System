@@ -19,65 +19,63 @@ export interface AuthResponse {
     id: string
     name: string
     email: string
-    role: 'admin' | 'portal'
+    role: 'admin' | 'internal' | 'portal'
   }
 }
 
+/**
+ * Authenticate a user against the backend.
+ * On success: stores the JWT in memory and returns the auth response.
+ * On failure: re-throws the error so the caller can display it.
+ */
 export async function loginUser(payload: LoginPayload): Promise<AuthResponse> {
-  try {
-    const { data } = await api.post<AuthResponse>('/auth/login', payload)
+  const { data } = await api.post<AuthResponse>('/auth/login', payload)
+  if (data.token) {
     setMemoryToken(data.token)
-    return data
-  } catch {
-    const mockToken = 'mock-token-123'
-    setMemoryToken(mockToken)
-    return {
-      success: true,
-      message: 'Mock login successful',
-      token: mockToken,
-      user: { id: 'test-1', name: 'Admin', email: payload.email, role: 'admin' }
-    }
   }
+  return data
 }
 
+/**
+ * Register a new user against the backend.
+ * On success: stores the JWT in memory and returns the auth response.
+ * On failure: re-throws the error so the caller can display it.
+ */
 export async function signupUser(payload: SignupPayload): Promise<AuthResponse> {
-  try {
-    const { data } = await api.post<AuthResponse>('/auth/signup', payload)
+  const { data } = await api.post<AuthResponse>('/auth/signup', payload)
+  if (data.token) {
     setMemoryToken(data.token)
-    return data
-  } catch {
-    const mockToken = 'mock-token-123'
-    setMemoryToken(mockToken)
-    return {
-      success: true,
-      message: 'Mock signup successful',
-      token: mockToken,
-      user: { id: 'test-1', name: payload.name, email: payload.email, role: 'portal' }
-    }
   }
+  return data
 }
 
+/**
+ * Request a password reset email.
+ * On failure: re-throws the error so the caller can display it.
+ */
 export async function requestPasswordReset(email: string): Promise<{ message: string }> {
-  try {
-    const { data } = await api.post('/auth/reset-password/request', { email })
-    return data
-  } catch {
-    return { message: 'Mock reset email sent' }
-  }
+  const { data } = await api.post('/auth/reset-password/request', { email })
+  return data
 }
 
+/**
+ * Confirm a password reset with token and new password.
+ * On failure: re-throws the error so the caller can display it.
+ */
 export async function confirmPasswordReset(payload: {
   token: string
   new_password: string
 }): Promise<{ message: string }> {
-  try {
-    const { data } = await api.post('/auth/reset-password/confirm', { token: payload.token, password: payload.new_password })
-    return data
-  } catch {
-    return { message: 'Mock password reset successful' }
-  }
+  const { data } = await api.post('/auth/reset-password/confirm', {
+    token: payload.token,
+    password: payload.new_password,
+  })
+  return data
 }
 
+/**
+ * Log out: clear the in-memory JWT and redirect to login.
+ */
 export function logoutUser() {
   clearMemoryToken()
   window.location.href = '/login'
