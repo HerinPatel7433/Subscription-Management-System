@@ -35,10 +35,14 @@ export default function DiscountsPage() {
   const [editing, setEditing] = useState<Discount | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Discount | null>(null)
 
-  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm<DiscountForm>({
+  const { register, handleSubmit, reset, watch, trigger, formState: { errors, isSubmitting } } = useForm<DiscountForm>({
     defaultValues: { type: 'percent', applies_to: 'all' },
   })
   const discountType = watch('type')
+
+  useEffect(() => {
+    trigger('value')
+  }, [discountType, trigger])
 
   const fetchAll = useCallback(async () => {
     try {
@@ -200,7 +204,13 @@ export default function DiscountsPage() {
                 type="number" step="0.01" min="0"
                 className={`form-input ${errors.value ? 'error' : ''}`}
                 placeholder={discountType === 'percent' ? '10' : '500'}
-                {...register('value', { required: 'Required', min: { value: 0, message: 'Must be ≥ 0' } })}
+                {...register('value', {
+                  required: 'Required',
+                  min: { value: 0, message: 'Must be ≥ 0' },
+                  ...(discountType === 'percent' && {
+                    max: { value: 100, message: 'Percentage cannot exceed 100%' },
+                  }),
+                })}
               />
               {errors.value && <p className="field-error">{errors.value.message}</p>}
             </div>
