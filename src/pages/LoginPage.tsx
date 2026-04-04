@@ -34,9 +34,11 @@ export default function LoginPage() {
       // Role-based redirect
       navigate(res.user.role === 'admin' ? '/dashboard' : '/my-subscriptions', { replace: true })
     } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { message?: string } }; message?: string }
       const msg =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
-        'Invalid email or password. Please try again.'
+        axiosErr?.response?.data?.message ??
+        axiosErr?.message ??
+        'Unable to connect to the server. Please try again later.'
       setServerError(msg)
     }
   }
