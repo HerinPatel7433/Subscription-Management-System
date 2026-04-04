@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, Pencil, Trash2, CreditCard } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Plus, Pencil, Trash2, CreditCard, Package } from 'lucide-react'
 import { useForm, Controller } from 'react-hook-form'
 import Modal from '@/components/Modal'
 import Toggle from '@/components/Toggle'
@@ -30,6 +31,7 @@ const PERIOD_COLORS: Record<string, string> = {
 export default function PlansPage() {
   const { isAdmin } = useAuth()
   const { toasts, toast, dismiss } = useToast()
+  const navigate = useNavigate()
 
   const [plans, setPlans] = useState<RecurringPlan[]>([])
   const [loading, setLoading] = useState(true)
@@ -121,12 +123,20 @@ export default function PlansPage() {
           </div>
         </div>
         {isAdmin && (
-          <button
-            onClick={openAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-xl transition-colors shadow-glow"
-          >
-            <Plus size={15} /> Add Plan
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={openAdd}
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-xl transition-colors shadow-glow"
+            >
+              <Plus size={15} /> Add Plan
+            </button>
+            <button
+              onClick={() => navigate('/products')}
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-700/60 hover:bg-slate-700 border border-slate-600/50 text-slate-300 text-xs font-medium rounded-xl transition-colors"
+            >
+              <Package size={14} /> Add Product
+            </button>
+          </div>
         )}
       </div>
 

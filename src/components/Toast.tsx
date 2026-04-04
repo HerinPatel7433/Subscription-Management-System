@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { CheckCircle, XCircle, X } from 'lucide-react'
 
 export type ToastType = 'success' | 'error'
@@ -71,13 +71,13 @@ function ToastItem({ toast, onDismiss }: { toast: ToastMessage; onDismiss: (id: 
 export function useToast() {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
 
-  const show = (type: ToastType, message: string) => {
+  const show = useCallback((type: ToastType, message: string) => {
     const id = Math.random().toString(36).slice(2)
     setToasts((prev) => [...prev, { id, type, message }])
-  }
+  }, [])
 
-  const dismiss = (id: string) =>
-    setToasts((prev) => prev.filter((t) => t.id !== id))
+  const dismiss = useCallback((id: string) =>
+    setToasts((prev) => prev.filter((t) => t.id !== id)), [])
 
   return { toasts, toast: show, dismiss }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, RefreshCw } from 'lucide-react'
+import { Plus, RefreshCw, Package } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import Modal from '@/components/Modal'
 import { Toast, useToast } from '@/components/Toast'
@@ -136,12 +136,20 @@ export default function SubscriptionsPage() {
           </div>
         </div>
         {isAdmin && (
-          <button
-            onClick={openCreate}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-xl transition-colors shadow-glow"
-          >
-            <Plus size={15} /> New Subscription
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={openCreate}
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium rounded-xl transition-colors shadow-glow"
+            >
+              <Plus size={15} /> New Subscription
+            </button>
+            <button
+              onClick={() => navigate('/products')}
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-700/60 hover:bg-slate-700 border border-slate-600/50 text-slate-300 text-xs font-medium rounded-xl transition-colors"
+            >
+              <Package size={14} /> Add Product
+            </button>
+          </div>
         )}
       </div>
 

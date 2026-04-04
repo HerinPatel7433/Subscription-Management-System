@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
 interface ModalProps {
@@ -10,8 +10,6 @@ interface ModalProps {
 }
 
 export default function Modal({ open, onClose, title, children, width = 'max-w-lg' }: ModalProps) {
-  const overlayRef = useRef<HTMLDivElement>(null)
-
   // Close on Escape
   useEffect(() => {
     if (!open) return
@@ -31,13 +29,9 @@ export default function Modal({ open, onClose, title, children, width = 'max-w-l
   if (!open) return null
 
   return (
-    <div
-      ref={overlayRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      onClick={(e) => { if (e.target === overlayRef.current) onClose() }}
-    >
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" onClick={onClose} />
 
       {/* Panel */}
       <div

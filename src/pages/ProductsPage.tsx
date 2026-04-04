@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Fragment } from 'react'
 import { Plus, Pencil, Trash2, ChevronDown, ChevronRight, Package } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import Modal from '@/components/Modal'
@@ -168,9 +168,8 @@ export default function ProductsPage() {
               ) : products.length === 0 ? (
                 <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-500">No products found</td></tr>
               ) : products.map((p) => (
-                <>
+                <Fragment key={p.id}>
                   <tr
-                    key={p.id}
                     className="hover:bg-white/[0.02] cursor-pointer transition-colors"
                   >
                     <td className="px-4 py-3">
@@ -262,7 +261,7 @@ export default function ProductsPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
