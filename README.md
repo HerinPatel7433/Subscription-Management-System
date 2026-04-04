@@ -144,14 +144,12 @@ docker-compose up --build
 
 ## 👥 Team Roles
 
-| Name             | Role                        | Responsibilities                                      |
-|------------------|-----------------------------|-------------------------------------------------------|
-| Herin Patel      | Project Manager / Full-Stack| Architecture, planning, integration, code reviews     |
-| *(TBD)*          | Frontend Developer          | React UI, component library, routing, state management|
-| *(TBD)*          | Backend Developer           | API design, business logic, authentication            |
-| *(TBD)*          | Database Engineer           | Schema design, migrations, query optimization         |
-| *(TBD)*          | QA / Testing                | Unit, integration, and E2E test suites                |
-| *(TBD)*          | DevOps                      | CI/CD, Docker, deployment pipeline                    |
+| Name                | Role                          | Responsibilities                                             |
+|---------------------|-------------------------------|--------------------------------------------------------------|
+| Herin Patel         | Project Manager / QA & Testing| Architecture, planning, integration, code reviews, unit/integration/E2E test suites |
+| Heneel Chhatbar     | Frontend Developer            | React UI, component library, routing, state management       |
+| Teesh Patel         | Backend Developer             | API design, business logic, authentication                   |
+| Aditya Kasundra     | Database Engineer & DevOps    | Schema design, migrations, query optimization, CI/CD, Docker, deployment pipeline |
 
 ---
 
