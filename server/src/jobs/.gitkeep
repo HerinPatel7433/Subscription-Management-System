@@ -1,0 +1,3 @@
+# Jobs directory
+# Add scheduled/cron jobs here (e.g., subscription renewal, invoice generation).
+# Example: billing.job.js, expiry-checker.job.js

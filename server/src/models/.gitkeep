@@ -1,0 +1,4 @@
+# Models directory
+# Prisma Client acts as the ORM/model layer for this project.
+# When raw query helpers or complex model abstractions are needed,
+# add them here as separate files (e.g., user.model.js, subscription.model.js).
