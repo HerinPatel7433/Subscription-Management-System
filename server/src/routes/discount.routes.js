@@ -5,6 +5,7 @@ const { verifyToken, checkRole } = require('../middleware/auth.middleware');
 const {
   listDiscounts,
   createDiscount,
+  updateDiscount,
   applyDiscount,
   deleteDiscount,
 } = require('../controllers/discount.controller');
@@ -15,7 +16,7 @@ const router = Router();
 
 const discountValidation = [
   body('name').trim().notEmpty().withMessage('Name is required.'),
-  body('type').isIn(['fixed', 'percentage']).withMessage('Type must be "fixed" or "percentage".'),
+  body('type').isIn(['fixed', 'percent', 'percentage']).withMessage('Type must be "fixed" or "percent".'),
   body('value').isFloat({ min: 0 }).withMessage('Value must be a non-negative number.'),
   body('min_purchase').optional().isFloat({ min: 0 }),
   body('min_qty').optional().isInt({ min: 0 }),
@@ -37,6 +38,7 @@ router.get('/', verifyToken, checkRole('admin', 'internal'), listDiscounts);
 // Admin only
 router.post('/', verifyToken, checkRole('admin'), discountValidation, createDiscount);
 router.post('/:id/apply', verifyToken, checkRole('admin'), applyValidation, applyDiscount);
+router.put('/:id', verifyToken, checkRole('admin'), discountValidation, updateDiscount);
 router.delete('/:id', verifyToken, checkRole('admin'), deleteDiscount);
 
 module.exports = router;

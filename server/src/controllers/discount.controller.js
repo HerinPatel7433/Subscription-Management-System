@@ -190,9 +190,63 @@ async function deleteDiscount(req, res) {
   }
 }
 
+// ─── PUT /api/discounts/:id ───────────────────────────────────────────────────
+
+/**
+ * @route   PUT /api/discounts/:id
+ * @desc    Update an existing discount
+ * @access  Admin only
+ */
+async function updateDiscount(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
+  const { id } = req.params;
+  const {
+    name, type, value, min_purchase, min_qty,
+    start_date, end_date, usage_limit
+  } = req.body;
+
+  try {
+    const existing = await prisma.discount.findFirst({ where: { id, deletedAt: null } });
+    if (!existing) {
+      return res.status(404).json({ success: false, message: 'Discount not found.' });
+    }
+
+    const discount = await prisma.discount.update({
+      where: { id },
+      data: {
+        name,
+        type,
+        value,
+        minPurchase: min_purchase || 0,
+        minQty: min_qty || 0,
+        startDate: start_date ? new Date(start_date) : null,
+        endDate: end_date ? new Date(end_date) : null,
+        usageLimit: usage_limit || null,
+      },
+      include: {
+        admin: { select: { id: true, name: true } },
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: formatDiscount(discount),
+      message: 'Discount updated successfully.',
+    });
+  } catch (error) {
+    console.error('updateDiscount error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+}
+
 module.exports = {
   listDiscounts,
   createDiscount,
+  updateDiscount,
   applyDiscount,
   deleteDiscount,
 };

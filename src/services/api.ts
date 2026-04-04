@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useAuthStore } from '../store/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
@@ -10,10 +11,9 @@ const api = axios.create({
   withCredentials: true, // sends httpOnly cookie automatically
 })
 
-// ── Request interceptor: attach JWT from memory store ────────────────
+// ── Request interceptor: attach JWT from persistent store ────────────────
 api.interceptors.request.use(
   (config) => {
-    // Token is stored in module-level memory (not localStorage) for XSS safety.
     const token = getMemoryToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -28,7 +28,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear in-memory token and redirect to login
+      // Clear token and auth, redirect to login
       clearMemoryToken()
       window.location.href = '/login'
     }
@@ -36,19 +36,16 @@ api.interceptors.response.use(
   },
 )
 
-// ── In-memory token store (module-level, survives re-renders but not refresh) ──
-let _token: string | null = null
-
 export function setMemoryToken(token: string) {
-  _token = token
+  useAuthStore.getState().setToken(token)
 }
 
 export function getMemoryToken(): string | null {
-  return _token
+  return useAuthStore.getState().token
 }
 
 export function clearMemoryToken() {
-  _token = null
+  useAuthStore.getState().clearAuth()
 }
 
 export default api

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export type UserRole = 'admin' | 'internal' | 'portal'
 
@@ -11,16 +12,28 @@ export interface AuthUser {
 
 interface AuthState {
   user: AuthUser | null
+  token: string | null
   isAuthenticated: boolean
   setUser: (user: AuthUser) => void
+  setToken: (token: string) => void
   clearAuth: () => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  isAuthenticated: false,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
 
-  setUser: (user) => set({ user, isAuthenticated: true }),
+      setUser: (user) => set({ user, isAuthenticated: true }),
 
-  clearAuth: () => set({ user: null, isAuthenticated: false }),
-}))
+      setToken: (token) => set({ token }),
+
+      clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
+    }),
+    {
+      name: 'auth-storage',
+    }
+  )
+)

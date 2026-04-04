@@ -77,7 +77,13 @@ export default function DiscountsPage() {
 
   const onSubmit = async (data: DiscountForm) => {
     try {
-      const payload = { ...data, value: Number(data.value), usage_limit: data.usage_limit ? Number(data.usage_limit) : undefined }
+      const payload = {
+        ...data,
+        value: Number(data.value),
+        usage_limit: data.usage_limit ? Number(data.usage_limit) : undefined,
+        start_date: data.start_date || undefined,
+        end_date: data.end_date || undefined,
+      }
       if (editing) {
         await updateDiscount(editing.id, payload)
         toast('success', 'Discount updated')
