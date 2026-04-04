@@ -4,7 +4,8 @@ import { ArrowLeft, FileText, RefreshCw, CheckCircle, XCircle, Plus, Pencil, Sav
 import { Toast, useToast } from '@/components/Toast'
 import { useAuth } from '@/hooks/useAuth'
 import {
-  getSubscription, updateSubscriptionStatus, generateInvoice, getProducts,
+  getSubscription, updateSubscriptionStatus, resumeSubscription,
+  generateInvoice, getProducts,
   type Subscription, type SubscriptionLine,
 } from '@/services/subscriptionService'
 import api from '@/services/api'
@@ -15,22 +16,24 @@ const STATUS_BADGE: Record<Subscription['status'], string> = {
   confirmed: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
   active:    'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
   closed:    'bg-red-500/20 text-red-300 border-red-500/30',
+  paused:    'bg-orange-500/20 text-orange-300 border-orange-500/30',
 }
 
-// Which action buttons are shown per status
 const STATUS_ACTIONS: Record<Subscription['status'], Subscription['status'][]> = {
   draft:     ['quotation', 'confirmed'],
   quotation: ['confirmed'],
   confirmed: ['active', 'closed'],
-  active:    ['closed'],
+  active:    ['closed', 'paused'],
+  paused:    ['active'],
   closed:    [],
 }
 
 const ACTION_LABELS: Partial<Record<Subscription['status'], { label: string; icon: React.ReactNode; cls: string }>> = {
-  quotation: { label: 'Send Quotation', icon: <FileText size={14} />, cls: 'bg-sky-600 hover:bg-sky-500' },
+  quotation: { label: 'Send Quotation', icon: <FileText size={14} />,    cls: 'bg-sky-600 hover:bg-sky-500' },
   confirmed: { label: 'Confirm',        icon: <CheckCircle size={14} />, cls: 'bg-amber-600 hover:bg-amber-500' },
-  active:    { label: 'Activate',       icon: <RefreshCw size={14} />, cls: 'bg-emerald-600 hover:bg-emerald-500' },
-  closed:    { label: 'Close',          icon: <XCircle size={14} />, cls: 'bg-red-600 hover:bg-red-500' },
+  active:    { label: 'Activate',       icon: <RefreshCw size={14} />,   cls: 'bg-emerald-600 hover:bg-emerald-500' },
+  closed:    { label: 'Close',          icon: <XCircle size={14} />,     cls: 'bg-red-600 hover:bg-red-500' },
+  paused:    { label: 'Pause',          icon: <RefreshCw size={14} />,   cls: 'bg-amber-600 hover:bg-amber-500' },
 }
 
 interface Product {
@@ -175,6 +178,26 @@ export default function SubscriptionDetailPage() {
                 </button>
               )
             })}
+            {sub.status === 'paused' && (
+              <button
+                onClick={async () => {
+                  setActionLoading(true)
+                  try {
+                    await resumeSubscription(id!)
+                    toast('success', 'Subscription resumed')
+                    fetchSub()
+                  } catch {
+                    toast('error', 'Failed to resume subscription')
+                  } finally {
+                    setActionLoading(false)
+                  }
+                }}
+                disabled={actionLoading}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition-colors disabled:opacity-50"
+              >
+                <RefreshCw size={14} /> Resume
+              </button>
+            )}
             {(sub.status === 'active' || sub.status === 'confirmed') && (
               <button
                 onClick={handleGenerateInvoice}

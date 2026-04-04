@@ -54,7 +54,7 @@ export interface Subscription {
   start_date: string
   expiration_date: string | null
   payment_terms: string | null
-  status: 'draft' | 'quotation' | 'confirmed' | 'active' | 'closed'
+  status: 'draft' | 'quotation' | 'confirmed' | 'active' | 'closed' | 'paused'
   created_at: string
   lines?: SubscriptionLine[]
 }
@@ -119,8 +119,30 @@ export const createSubscription = (data: Partial<Subscription> & { lines?: Subsc
   api.post<Subscription>('/subscriptions', data)
 export const updateSubscription = (id: string, data: Partial<Subscription>) =>
   api.put<Subscription>(`/subscriptions/${id}`, data)
-export const updateSubscriptionStatus = (id: string, status: Subscription['status']) =>
-  api.patch<Subscription>(`/subscriptions/${id}/status`, { status })
+const STATUS_ACTION_MAP: Partial<Record<Subscription['status'], string>> = {
+  quotation: 'confirm',
+  confirmed: 'confirm',
+  active:    'activate',
+  closed:    'close',
+  paused:    'pause',
+}
+
+export const updateSubscriptionStatus = (
+  id: string,
+  status: Subscription['status']
+): Promise<import('axios').AxiosResponse<Subscription>> => {
+  const action = STATUS_ACTION_MAP[status]
+  if (!action) {
+    return Promise.reject(new Error(`No action mapped for status: ${status}`))
+  }
+  return api.post<Subscription>(`/subscriptions/${id}/${action}`)
+}
+
+export const resumeSubscription = (id: string) =>
+  api.post<Subscription>(`/subscriptions/${id}/resume`)
+
+export const renewSubscription = (id: string) =>
+  api.post<Subscription>(`/subscriptions/${id}/renew`)
 export const generateInvoice = (id: string) =>
   api.post(`/invoices/generate/${id}`)
 
