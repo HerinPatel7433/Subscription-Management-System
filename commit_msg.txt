@@ -1,0 +1,16 @@
+feat: add Invoices, Payments, Discounts, Taxes, and Reports screens
+
+- Add billingService.ts with full API layer and TypeScript types
+- InvoicesPage: data table with split-panel detail view, status badges,
+  Confirm/Cancel/Send Email/PDF actions
+- PaymentsPage: transactions table, Record Payment modal with live
+  outstanding balance for selected invoice
+- DiscountsPage (admin): discount rules table with add/edit/delete modals,
+  supports fixed and percentage types with date range and usage limits
+- TaxesPage (admin): CRUD table with per-row active/inactive toggle
+- ReportsPage: 4 KPI cards, Recharts bar chart (revenue by month),
+  top customers table, filter bar with date range/plan/status, CSV export
+- Install recharts for charting
+- Update App.tsx routing: invoices accessible to admin+portal,
+  payments/discounts/taxes/reports admin-only
+- All screens fall back gracefully to mock data when API is unavailable

@@ -8,6 +8,11 @@ import ProductsPage from '@/pages/ProductsPage'
 import PlansPage from '@/pages/PlansPage'
 import SubscriptionsPage from '@/pages/SubscriptionsPage'
 import SubscriptionDetailPage from '@/pages/SubscriptionDetailPage'
+import InvoicesPage from '@/pages/InvoicesPage'
+import PaymentsPage from '@/pages/PaymentsPage'
+import DiscountsPage from '@/pages/DiscountsPage'
+import TaxesPage from '@/pages/TaxesPage'
+import ReportsPage from '@/pages/ReportsPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import Layout from '@/components/Layout'
 
@@ -28,12 +33,16 @@ export default function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-        {/* Admin routes */}
-        <Route path="/dashboard"       element={<AdminRoute><DashboardPage /></AdminRoute>} />
-        <Route path="/products"        element={<AdminRoute><ProductsPage /></AdminRoute>} />
-        <Route path="/plans"           element={<AdminRoute><PlansPage /></AdminRoute>} />
-        <Route path="/subscriptions"   element={<AdminRoute><SubscriptionsPage /></AdminRoute>} />
+        {/* Admin-only routes */}
+        <Route path="/dashboard"         element={<AdminRoute><DashboardPage /></AdminRoute>} />
+        <Route path="/products"          element={<AdminRoute><ProductsPage /></AdminRoute>} />
+        <Route path="/plans"             element={<AdminRoute><PlansPage /></AdminRoute>} />
+        <Route path="/subscriptions"     element={<AdminRoute><SubscriptionsPage /></AdminRoute>} />
         <Route path="/subscriptions/:id" element={<AdminRoute><SubscriptionDetailPage /></AdminRoute>} />
+        <Route path="/payments"          element={<AdminRoute><PaymentsPage /></AdminRoute>} />
+        <Route path="/discounts"         element={<AdminRoute><DiscountsPage /></AdminRoute>} />
+        <Route path="/taxes"             element={<AdminRoute><TaxesPage /></AdminRoute>} />
+        <Route path="/reports"           element={<AdminRoute><ReportsPage /></AdminRoute>} />
 
         {/* Portal + Admin routes */}
         <Route
@@ -41,6 +50,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['admin', 'portal']}>
               <Layout><MySubscriptionsPage /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invoices"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'portal']}>
+              <Layout><InvoicesPage /></Layout>
             </ProtectedRoute>
           }
         />
