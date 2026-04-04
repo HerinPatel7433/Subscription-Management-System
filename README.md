@@ -1,194 +1,125 @@
-# 📦 Subscription Management System (SMS)
+# Subscription Management System
 
-> A full-stack web application for managing subscriptions, billing, invoices, taxes, and payments — built for businesses that need reliable, scalable subscription lifecycle management.
+> A comprehensive, modern platform for managing product subscriptions, automated invoicing, secure payment processing, and business analytics.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Issues](https://img.shields.io/github/issues/HerinPatel7433/Subscription-Management-System)](https://github.com/HerinPatel7433/Subscription-Management-System/issues)
+## 🔗 Live Demo
+[Live Demo URL (Setup Required)](#)
 
----
+## 💻 Tech Stack
 
-## 🧩 Features
+| Component | Technology |
+| :--- | :--- |
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Zustand, React Hook Form |
+| **Backend** | Node.js, Express, TypeScript, Prisma *(Reference implementation)* |
+| **Database** | PostgreSQL 14+ |
+| **Auth** | JSON Web Tokens (JWT) / Bearer Authentication |
+| **Deployment** | Vercel (Frontend), Render (Backend) *Recommended* |
 
-- 🔐 **Authentication & Authorization** — Secure login, role-based access control
-- 📦 **Product & Plan Management** — Flexible pricing tiers and plan configurations
-- 🔄 **Subscription Lifecycle** — Create, upgrade, downgrade, cancel, and renew subscriptions
-- 🧾 **Invoice Generation** — Automated invoicing with downloadable PDFs
-- 💳 **Payment Processing** — Integrated payment gateway support
-- 🏷️ **Discounts & Coupons** — Apply promotional codes and discount rules
-- 🧮 **Tax Management** — Region-based tax configuration and calculation
-- 📊 **Reports & Analytics** — Usage, revenue, and churn reports
+## ✨ Features (12 Core Modules)
+1. **Authentication**: Secure login, signup, and password reset flows with strong Zod validation.
+2. **Roles & RBAC**: Fully protected routing offering tiered access for `admin`, `internal`, and `portal` users.
+3. **Products Catalog**: Centralized management for physical/digital product offerings.
+4. **Subscription Plans**: Flexible recurring billing definitions (monthly, yearly, tiered).
+5. **Subscriptions Lifecycle**: E2E state management (Draft → Activate → Pause → Renew → Cancel).
+6. **Invoicing**: Automated invoice calculation including tax, discounts, and line-item breakdowns.
+7. **Payment Processing**: Multi-method transaction logging (Cash, Card, Bank, UPI) against outstanding balances.
+8. **Discounts Engine**: Configurable flat-rate or percentage-based promotional rules.
+9. **Taxes Administration**: Configurable global/local tax rates manageable by active toggle states.
+10. **Reports & Analytics**: Comprehensive dashboard highlighting MRR, churn rates, and CSV data export functionality.
+11. **Cron Jobs / Billing Engine**: Backend processors for generating periodic invoices and validating states.
+12. **Admin Dashboard**: Aggregated high-level views featuring Recharts-based telemetry and quick actions.
 
----
+## 👥 Team Roles
 
-## 🛠️ Tech Stack
-
-| Layer        | Technology                          |
-|--------------|-------------------------------------|
-| **Frontend** | React.js, React Router, Axios       |
-| **Backend**  | Node.js, Express.js                 |
-| **Database** | PostgreSQL, Prisma ORM              |
-| **Auth**     | JWT, bcrypt                         |
-| **Payments** | Stripe API (or Razorpay)            |
-| **Testing**  | Jest, React Testing Library, Supertest |
-| **DevOps**   | Docker, GitHub Actions (CI/CD)      |
-| **Docs**     | Swagger / OpenAPI 3.0               |
-
----
-
-## 🗂️ Project Structure
-
-```
-Subscription-Management-System/
-├── client/               # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   └── store/
-│   └── public/
-├── server/               # Node.js + Express backend
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   └── services/
-│   └── prisma/
-│       └── schema.prisma
-├── docs/                 # API documentation
-├── tests/                # Integration & E2E tests
-├── .github/
-│   ├── workflows/        # CI/CD pipelines
-│   └── ISSUE_TEMPLATE/
-├── docker-compose.yml
-├── .env.example
-└── README.md
-```
+| Name | Role | GitHub Username |
+| :--- | :--- | :--- |
+| Janvee | Project Manager / Tester | [@Janvee](#) |
+| Herin Patel | Lead Developer | [@HerinPatel7433](https://github.com/HerinPatel7433) |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+- **Node.js** 18+
+- **PostgreSQL** 14+
 
-- **Node.js** v18+
-- **PostgreSQL** v14+
-- **npm** or **yarn**
-- **Docker** (optional, for containerized setup)
-
-### Installation
-
+### 1. Clone the repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/HerinPatel7433/Subscription-Management-System.git
 cd Subscription-Management-System
+```
 
-# 2. Install backend dependencies
-cd server && npm install
+### 2. Backend Setup
+*(Note: Ensure you are in the application's api or backend directory if separated.)*
+```bash
+# Install backend dependencies
+npm install
 
-# 3. Install frontend dependencies
-cd ../client && npm install
-
-# 4. Configure environment variables
+# Configure Environment Variables
 cp .env.example .env
-# Edit .env with your DB credentials, JWT secret, and payment keys
+
+# Run database migrations
+npx prisma migrate dev
+
+# Seed the database with initial products, plans, and admin user
+npm run seed
+
+# Start the REST API server
+npm run dev
 ```
 
-### Database Setup
-
+### 3. Frontend Setup
+*(Note: Return to the repository root or frontend directory.)*
 ```bash
-# Run migrations
-cd server
-npx prisma migrate dev --name init
-npx prisma generate
+# Install frontend dependencies
+npm install
 
-# (Optional) Seed demo data
-npx prisma db seed
-```
+# Configure Environment Variables
+# Create a .env file and ensure VITE_API_URL is accurately pointing to your Backend URL.
 
-### Running Locally
-
-```bash
-# Start backend (from /server)
-npm run dev          # runs on http://localhost:5000
-
-# Start frontend (from /client)
-npm run dev          # runs on http://localhost:5173
-```
-
-### Docker Setup
-
-```bash
-docker-compose up --build
+# Start the Vite development environment
+npm run dev
 ```
 
 ---
 
-## 🌿 Branch Strategy
+## 🔐 Environment Variables
 
-| Branch Pattern         | Purpose                               |
-|------------------------|---------------------------------------|
-| `main`                 | Production-ready code                 |
-| `dev`                  | Integration branch for features       |
-| `feat/frontend-*`      | Frontend feature development          |
-| `feat/backend-*`       | Backend feature development           |
-| `feat/db-*`            | Database schema & migration work      |
-| `chore/*`              | Config, tooling, and maintenance      |
-| `test/*`               | Testing-specific branches             |
+Ensure these files are present at the root or respective component directories, configured accurately.
+No secrets are documented here for security purposes.
 
-> **Workflow**: All feature branches → `dev` → reviewed → merged into `main`
-
----
-
-## 👥 Team Roles
-
-| Name                | Role                          | Responsibilities                                             |
-|---------------------|-------------------------------|--------------------------------------------------------------|
-| Herin Patel         | Project Manager / QA & Testing| Architecture, planning, integration, code reviews, unit/integration/E2E test suites |
-| Heneel Chhatbar     | Frontend Developer            | React UI, component library, routing, state management       |
-| Teesh Patel         | Backend Developer             | API design, business logic, authentication                   |
-| Aditya Kasundra     | Database Engineer & DevOps    | Schema design, migrations, query optimization, CI/CD, Docker, deployment pipeline |
+| Variable | Target | Description | Example |
+| :--- | :--- | :--- | :--- |
+| `VITE_API_URL` | Frontend | Base URL endpoint for REST API calls | `http://localhost:3000/api` |
+| `DATABASE_URL` | Backend | Connection string used by Prisma | `postgresql://user:pass@localhost:5432/sms` |
+| `JWT_SECRET` | Backend | Secret signing key for standard JWT creation | `super_secret_string` |
+| `PORT` | Backend | The core port that the active instance listens on | `3000` |
+| `FRONTEND_URL` | Backend | Known origin of the frontend instance (for CORS/Emails) | `http://localhost:5173` |
 
 ---
 
-## 📋 Modules & Issues
+## 📖 API Documentation
 
-| Module          | Status     | Issue                        |
-|-----------------|------------|------------------------------|
-| Authentication  | 🔲 Backlog  | #1 Auth Module               |
-| Products        | 🔲 Backlog  | #2 Products Module           |
-| Plans           | 🔲 Backlog  | #3 Plans Module              |
-| Subscriptions   | 🔲 Backlog  | #4 Subscriptions Module      |
-| Invoices        | 🔲 Backlog  | #5 Invoices Module           |
-| Payments        | 🔲 Backlog  | #6 Payments Module           |
-| Discounts       | 🔲 Backlog  | #7 Discounts Module          |
-| Taxes           | 🔲 Backlog  | #8 Taxes Module              |
-| Reports         | 🔲 Backlog  | #9 Reports Module            |
+The REST API utilizes JSON payloads and accepts Bearer Token authentication headers. The default local prefix is `http://localhost:3000/api`.
+
+We have mapped all critical endpoints directly into a ready-to-run Postman JSON collection containing expected routing sequences, authorization, and standard parameter behaviors. 
+
+👉 **[Download Complete Postman Collection](./docs/SMS-API.postman_collection.json)**
+
+*To begin testing interfaces immediately, import the collection into Postman and update the `{{baseUrl}}` and `{{token}}` variables under the primary environment configuration module.*
 
 ---
 
-## 🤝 Contributing
+## 📊 Database ERD
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feat/backend-auth`
-3. Commit your changes: `git commit -m "feat: add JWT authentication middleware"`
-4. Push to the branch: `git push origin feat/backend-auth`
-5. Open a Pull Request to `dev`
+*This outlines the general unified connections mapping Subscriptions, Payments, Plans, and Invoices down to the normalized user level.*
 
-Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
+![Database ERD](./docs/erd-placeholder.png)
+*(Note: A generated schematic from Prisma Studio or similar tool would be placed here).*
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📬 Contact
-
-**Herin Patel** — [GitHub @HerinPatel7433](https://github.com/HerinPatel7433)
-
-> ⭐ Star this repo if you find it useful!
+This project is open-source software licensed under the [MIT License](LICENSE).
