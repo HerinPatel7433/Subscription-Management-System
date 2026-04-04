@@ -23,25 +23,9 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-const convertKeysToSnakeCase = (obj: any): any => {
-  if (Array.isArray(obj)) {
-    return obj.map(v => convertKeysToSnakeCase(v));
-  } else if (obj !== null && typeof obj === 'object') {
-    return Object.keys(obj).reduce((acc, key) => {
-      acc[toSnakeCase(key)] = convertKeysToSnakeCase(obj[key]);
-      return acc;
-    }, {} as any);
-  }
-  return obj;
-};
-
-// ── Response interceptor: handle 401 globally and convert keys ────────────────────────
+// ── Response interceptor: handle 401 globally ────────────────────────
 api.interceptors.response.use(
   (response) => {
-    if (response.data) {
-      response.data = convertKeysToSnakeCase(response.data);
-    }
     return response;
   },
   (error) => {
