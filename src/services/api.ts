@@ -23,12 +23,29 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// ── Response interceptor: handle 401 globally ────────────────────────
+const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+const convertKeysToSnakeCase = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map(v => convertKeysToSnakeCase(v));
+  } else if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      acc[toSnakeCase(key)] = convertKeysToSnakeCase(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+};
+
+// ── Response interceptor: handle 401 globally and convert keys ────────────────────────
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (response.data) {
+      response.data = convertKeysToSnakeCase(response.data);
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
-      // Clear in-memory token and redirect to login
       clearMemoryToken()
       window.location.href = '/login'
     }
