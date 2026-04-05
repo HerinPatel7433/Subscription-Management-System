@@ -137,6 +137,30 @@ export const recordPayment = (data: RecordPaymentPayload) =>
 export const getInvoiceBalance = () =>
   api.get<{ invoiceId: string; balanceDue: number }[]>('/payments/outstanding')
 
+// ── Razorpay API ──────────────────────────────────────────────────────
+
+export interface RazorpayOrderData {
+  order_id: string
+  amount: number           // in paise
+  amount_display: number   // in rupees
+  currency: string
+  key_id: string
+  invoice_id: string
+  customer_name: string
+  customer_email: string
+  invoice_number: string
+}
+
+export const createRazorpayOrder = (invoice_id: string) =>
+  api.post<RazorpayOrderData>('/razorpay/create-order', { invoice_id })
+
+export const verifyRazorpayPayment = (data: {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
+  invoice_id: string
+}) => api.post('/razorpay/verify', data)
+
 // ── Discount API ──────────────────────────────────────────────────────
 
 export const getDiscounts = () =>

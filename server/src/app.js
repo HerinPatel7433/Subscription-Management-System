@@ -17,6 +17,7 @@ const adminRoutes = require('./routes/admin.routes');
 const userRoutes = require('./routes/user.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 const reportsRoutes = require('./routes/reports.routes');
+const razorpayRoutes = require('./routes/razorpay.routes');
 const { startJobs } = require('./jobs');
 
 const app = express();
@@ -69,6 +70,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportsRoutes);
+app.use('/api/razorpay', razorpayRoutes);
 
 // ─── Start Cron Jobs ───────────────────────────────────────────────────────────
 startJobs();

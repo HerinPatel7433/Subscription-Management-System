@@ -16,6 +16,7 @@ import ReportsPage from '@/pages/ReportsPage'
 import UsersPage from '@/pages/UsersPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import Layout from '@/components/Layout'
+import PaymentCheckoutPage from '@/pages/PaymentCheckoutPage'
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
   return (
@@ -68,6 +69,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['admin', 'portal']}>
               <Layout><InvoicesPage /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invoices/:id/pay"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'internal']}>
+              <PaymentCheckoutPage />
             </ProtectedRoute>
           }
         />

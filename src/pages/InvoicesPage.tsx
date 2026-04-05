@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   FileText, CheckCircle, XCircle, Send, Download,
-  ChevronLeft, Eye,
+  ChevronLeft, Eye, Zap,
 } from 'lucide-react'
 import { Toast, useToast } from '@/components/Toast'
 import {
@@ -54,6 +55,7 @@ const MOCK_INVOICES: Invoice[] = [
 ]
 
 export default function InvoicesPage() {
+  const navigate = useNavigate()
   const { toasts, toast, dismiss } = useToast()
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [selected, setSelected] = useState<Invoice | null>(null)
@@ -171,6 +173,18 @@ export default function InvoicesPage() {
                     <td className="px-4 py-3 text-slate-400 text-xs">{inv.due_date}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
+                        {inv.status === 'confirmed' && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              navigate(`/invoices/${inv.id}/pay`)
+                            }}
+                            className="flex items-center gap-1 text-xs px-2 py-1 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/30 rounded-lg transition-colors font-medium"
+                            title="Pay Online with Razorpay"
+                          >
+                            <Zap size={11} /> Pay
+                          </button>
+                        )}
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
