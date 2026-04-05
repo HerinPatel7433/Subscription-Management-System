@@ -39,7 +39,8 @@ export interface Payment {
   invoice_number?: string
   customer_name?: string
   amount: number
-  method: PaymentMethod
+  method: PaymentMethod        // returned by backend as 'method'
+  payment_method?: PaymentMethod
   payment_date: string
   notes?: string
 }
@@ -47,7 +48,7 @@ export interface Payment {
 export interface RecordPaymentPayload {
   invoice_id: string
   amount: number
-  method: PaymentMethod
+  payment_method: PaymentMethod
   payment_date: string
   notes?: string
 }

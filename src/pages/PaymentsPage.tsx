@@ -30,7 +30,7 @@ const METHOD_BADGE: Record<PaymentMethod, string> = {
 type PaymentForm = {
   invoice_id: string
   amount: number
-  method: PaymentMethod
+  payment_method: PaymentMethod
   payment_date: string
   notes?: string
 }
@@ -45,7 +45,7 @@ export default function PaymentsPage() {
   const [balanceLoading, setBalanceLoading] = useState(false)
 
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<PaymentForm>({
-    defaultValues: { payment_date: new Date().toISOString().slice(0, 10), method: 'bank_transfer' },
+    defaultValues: { payment_date: new Date().toISOString().slice(0, 10), payment_method: 'bank_transfer' },
   })
 
   const selectedInvoiceId = watch('invoice_id')
@@ -82,16 +82,19 @@ export default function PaymentsPage() {
       .finally(() => setBalanceLoading(false))
   }, [selectedInvoiceId, invoices])
 
-  const openModal = () => { reset({ payment_date: new Date().toISOString().slice(0, 10), method: 'bank_transfer' }); setModalOpen(true) }
+  const openModal = () => { reset({ payment_date: new Date().toISOString().slice(0, 10), payment_method: 'bank_transfer' }); setModalOpen(true) }
 
   const onSubmit = async (data: PaymentForm) => {
     try {
       await recordPayment({ ...data, amount: Number(data.amount) })
-      toast('success', 'Payment recorded')
+      toast('success', 'Payment recorded successfully')
       setModalOpen(false)
       fetchAll()
-    } catch {
-      toast('error', 'Failed to record payment')
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        ?? 'Failed to record payment'
+      toast('error', msg)
     }
   }
 
@@ -164,7 +167,7 @@ export default function PaymentsPage() {
               {...register('invoice_id', { required: 'Select an invoice' })}
             >
               <option value="">Select invoice…</option>
-              {invoices.filter((i) => i.status !== 'paid' && i.status !== 'cancelled').map((i) => (
+              {invoices.filter((i) => i.status === 'confirmed').map((i) => (
                 <option key={i.id} value={i.id}>{i.invoice_number} — {i.customer_name} (₹{i.amount.toLocaleString()})</option>
               ))}
             </select>
@@ -202,7 +205,7 @@ export default function PaymentsPage() {
           {/* Method */}
           <div>
             <label className="form-label">Payment Method</label>
-            <select className="form-input" {...register('method', { required: true })}>
+            <select className="form-input" {...register('payment_method', { required: true })}>
               <option value="bank_transfer">Bank Transfer</option>
               <option value="credit_card">Credit Card</option>
               <option value="cash">Cash</option>

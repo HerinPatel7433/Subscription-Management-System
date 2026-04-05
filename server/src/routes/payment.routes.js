@@ -13,7 +13,7 @@ const router = Router();
 // ─── Validation ───────────────────────────────────────────────────────────────
 
 const paymentValidation = [
-  body('invoice_id').isUUID().withMessage('invoice_id must be a valid UUID.'),
+  body('invoice_id').matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('invoice_id must be a valid UUID.'),
   body('payment_method').trim().notEmpty().withMessage('payment_method is required.'),
   body('amount').isFloat({ gt: 0 }).withMessage('amount must be greater than zero.'),
   body('payment_date').optional().isISO8601().withMessage('payment_date must be a valid ISO Date.'),

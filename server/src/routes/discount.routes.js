@@ -26,7 +26,7 @@ const discountValidation = [
 
 const applyValidation = [
   body('target').isIn(['product', 'subscription']).withMessage('Target must be "product" or "subscription".'),
-  body('reference_id').isUUID().withMessage('Reference ID must be a valid UUID.'),
+  body('reference_id').matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('Reference ID must be a valid UUID.'),
 ];
 
 // ─── Routes ──────────────────────────────────────────────────────────────────

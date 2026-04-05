@@ -23,11 +23,11 @@ const router = Router();
 const createSubscriptionValidation = [
   body('customer_id')
     .notEmpty().withMessage('customer_id is required.')
-    .isUUID().withMessage('customer_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('customer_id must be a valid UUID.'),
 
   body('plan_id')
     .notEmpty().withMessage('plan_id is required.')
-    .isUUID().withMessage('plan_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('plan_id must be a valid UUID.'),
 
   body('start_date')
     .notEmpty().withMessage('start_date is required.')
@@ -44,13 +44,13 @@ const createSubscriptionValidation = [
 
   body('template_id')
     .optional()
-    .isUUID().withMessage('template_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('template_id must be a valid UUID.'),
 ];
 
 const addLineValidation = [
   body('product_id')
     .notEmpty().withMessage('product_id is required.')
-    .isUUID().withMessage('product_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('product_id must be a valid UUID.'),
 
   body('quantity')
     .notEmpty().withMessage('quantity is required.')
@@ -62,7 +62,7 @@ const addLineValidation = [
 
   body('tax_id')
     .optional()
-    .isUUID().withMessage('tax_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('tax_id must be a valid UUID.'),
 ];
 
 // ─── Subscription Routes ──────────────────────────────────────────────────────

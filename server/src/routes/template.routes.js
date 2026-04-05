@@ -28,12 +28,12 @@ const createTemplateValidation = [
 
   body('plan_id')
     .notEmpty().withMessage('plan_id is required.')
-    .isUUID().withMessage('plan_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('plan_id must be a valid UUID.'),
 
   body('lines').optional().isArray().withMessage('lines must be an array.'),
 
   body('lines.*.product_id')
-    .isUUID().withMessage('Each line product_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('Each line product_id must be a valid UUID.'),
 
   body('lines.*.quantity')
     .isInt({ min: 1 }).withMessage('Each line quantity must be a positive integer.'),
@@ -55,13 +55,13 @@ const updateTemplateValidation = [
 
   body('plan_id')
     .optional()
-    .isUUID().withMessage('plan_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('plan_id must be a valid UUID.'),
 ];
 
 const addLineValidation = [
   body('product_id')
     .notEmpty().withMessage('product_id is required.')
-    .isUUID().withMessage('product_id must be a valid UUID.'),
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('product_id must be a valid UUID.'),
 
   body('quantity')
     .notEmpty().withMessage('quantity is required.')
