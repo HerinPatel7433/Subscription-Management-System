@@ -17,6 +17,7 @@ import UsersPage from '@/pages/UsersPage'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import Layout from '@/components/Layout'
 import PaymentCheckoutPage from '@/pages/PaymentCheckoutPage'
+import SubscribePage from '@/pages/SubscribePage'
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
   return (
@@ -61,6 +62,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['admin', 'portal']}>
               <Layout><MySubscriptionsPage /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/store"
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'portal']}>
+              <Layout><SubscribePage /></Layout>
             </ProtectedRoute>
           }
         />

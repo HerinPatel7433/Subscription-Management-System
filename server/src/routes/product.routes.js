@@ -100,13 +100,13 @@ const updateVariantValidation = [
  * @route   GET /api/products
  * @access  Admin, Internal
  */
-router.get('/', verifyToken, checkRole('admin', 'internal'), listProducts);
+router.get('/', verifyToken, checkRole('admin', 'internal', 'portal'), listProducts);
 
 /**
  * @route   GET /api/products/:id
  * @access  Admin, Internal
  */
-router.get('/:id', verifyToken, checkRole('admin', 'internal'), getProduct);
+router.get('/:id', verifyToken, checkRole('admin', 'internal', 'portal'), getProduct);
 
 /**
  * @route   POST /api/products
@@ -132,7 +132,7 @@ router.delete('/:id', verifyToken, checkRole('admin'), deleteProduct);
  * @route   GET /api/products/:id/variants
  * @access  Admin, Internal
  */
-router.get('/:id/variants', verifyToken, checkRole('admin', 'internal'), listVariants);
+router.get('/:id/variants', verifyToken, checkRole('admin', 'internal', 'portal'), listVariants);
 
 /**
  * @route   POST /api/products/:id/variants

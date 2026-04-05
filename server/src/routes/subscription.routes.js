@@ -14,6 +14,7 @@ const {
   pauseSubscription,
   resumeSubscription,
   renewSubscription,
+  portalSubscribe,
 } = require('../controllers/subscription.controller');
 
 const router = Router();
@@ -65,6 +66,24 @@ const addLineValidation = [
     .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('tax_id must be a valid UUID.'),
 ];
 
+const portalSubscribeValidation = [
+  body('plan_id')
+    .notEmpty().withMessage('plan_id is required.')
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('plan_id must be a valid UUID.'),
+
+  body('services')
+    .optional()
+    .isArray().withMessage('services must be an array.'),
+
+  body('services.*.product_id')
+    .notEmpty().withMessage('product_id in services is required.')
+    .matches(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).withMessage('services.*.product_id must be a valid UUID.'),
+
+  body('services.*.quantity')
+    .optional()
+    .isInt({ min: 1 }).withMessage('services.*.quantity must be a positive integer.'),
+];
+
 // ─── Subscription Routes ──────────────────────────────────────────────────────
 
 /**
@@ -78,6 +97,18 @@ router.get('/', verifyToken, listSubscriptions);
  * @access  All authenticated (portal sees own only)
  */
 router.get('/:id', verifyToken, getSubscription);
+
+/**
+ * @route   POST /api/subscriptions/subscribe
+ * @access  Portal
+ */
+router.post(
+  '/subscribe',
+  verifyToken,
+  checkRole('portal'),
+  portalSubscribeValidation,
+  portalSubscribe
+);
 
 /**
  * @route   POST /api/subscriptions

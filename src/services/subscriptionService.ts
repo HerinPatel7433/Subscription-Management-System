@@ -117,6 +117,8 @@ export const getSubscriptions = () => api.get<Subscription[]>('/subscriptions')
 export const getSubscription = (id: string) => api.get<Subscription>(`/subscriptions/${id}`)
 export const createSubscription = (data: Partial<Subscription> & { lines?: SubscriptionLine[] }) =>
   api.post<Subscription>('/subscriptions', data)
+export const userSubscribe = (data: { plan_id: string; services?: { product_id: string; quantity: number }[] }) =>
+  api.post<{ success: boolean; data: Subscription; message: string }>('/subscriptions/subscribe', data)
 export const updateSubscription = (id: string, data: Partial<Subscription>) =>
   api.put<Subscription>(`/subscriptions/${id}`, data)
 const STATUS_ACTION_MAP: Partial<Record<Subscription['status'], string>> = {

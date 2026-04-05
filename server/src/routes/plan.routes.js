@@ -111,13 +111,13 @@ const updatePlanValidation = [
  * @route   GET /api/plans
  * @access  Admin, Internal
  */
-router.get('/', verifyToken, checkRole('admin', 'internal'), listPlans);
+router.get('/', verifyToken, checkRole('admin', 'internal', 'portal'), listPlans);
 
 /**
  * @route   GET /api/plans/:id
  * @access  Admin, Internal
  */
-router.get('/:id', verifyToken, checkRole('admin', 'internal'), getPlan);
+router.get('/:id', verifyToken, checkRole('admin', 'internal', 'portal'), getPlan);
 
 /**
  * @route   POST /api/plans

@@ -18,6 +18,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Products',      path: '/products',          icon: <Package size={18} />,         roles: ['admin', 'internal'] },
   { label: 'Plans',         path: '/plans',             icon: <CreditCard size={18} />,      roles: ['admin', 'internal'] },
   { label: 'Subscriptions', path: '/subscriptions',     icon: <RefreshCw size={18} />,       roles: ['admin', 'internal'] },
+  { label: 'Store',         path: '/store',             icon: <Package size={18} />,         roles: ['portal'] },
   { label: 'My Subscriptions', path: '/my-subscriptions', icon: <RefreshCw size={18} />,    roles: ['portal'] },
   { label: 'Invoices',      path: '/invoices',          icon: <FileText size={18} />,        roles: ['admin', 'portal'] },
   { label: 'Payments',      path: '/payments',          icon: <Wallet size={18} />,          roles: ['admin'] },

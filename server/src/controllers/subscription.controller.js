@@ -196,6 +196,84 @@ async function createSubscription(req, res) {
   }
 }
 
+// ─── POST /api/subscriptions/subscribe (Portal) ───────────────────────────────
+
+/**
+ * @route   POST /api/subscriptions/subscribe
+ * @desc    Portal user self-subscribes to a plan with optional services.
+ * @access  Portal
+ */
+async function portalSubscribe(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
+  const { plan_id, services } = req.body;
+
+  try {
+    const customer_id = req.user.id;
+
+    // Validate plan
+    const plan = await prisma.recurringPlan.findFirst({
+      where: { id: plan_id, deletedAt: null },
+    });
+    if (!plan) {
+      return res.status(404).json({ success: false, message: 'Plan not found.' });
+    }
+
+    // Prepare line items
+    const lineItems = [];
+    if (services && Array.isArray(services) && services.length > 0) {
+      for (const svc of services) {
+        const product = await prisma.product.findFirst({
+          where: { id: svc.product_id, deletedAt: null },
+        });
+        if (!product) {
+          return res.status(404).json({ success: false, message: `Product not found.` });
+        }
+        lineItems.push({
+          productId: product.id,
+          quantity: svc.quantity || 1,
+          unitPrice: product.salesPrice,
+          amount: Number(product.salesPrice) * (svc.quantity || 1)
+        });
+      }
+    }
+
+    const subscriptionNumber = generateSubscriptionNumber();
+
+    const subscription = await prisma.subscription.create({
+      data: {
+        subscriptionNumber,
+        customerId: customer_id,
+        planId: plan_id,
+        startDate: new Date(),
+        status: 'quotation', // Move straight to quotation as it's self-serve
+        lines: {
+          create: lineItems,
+        },
+      },
+      include: {
+        customer: { select: { id: true, name: true, email: true } },
+        plan: { select: { id: true, name: true, billingPeriod: true } },
+        lines: {
+          include: { product: { select: { id: true, name: true } } },
+        },
+      },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Subscription created successfully. Proceed to payment.',
+      data: formatSubscription(subscription),
+    });
+  } catch (error) {
+    console.error('portalSubscribe error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+}
+
 // ─── POST /api/subscriptions/:id/lines ───────────────────────────────────────
 
 /**
@@ -528,6 +606,7 @@ module.exports = {
   listSubscriptions,
   getSubscription,
   createSubscription,
+  portalSubscribe,
   addSubscriptionLine,
   deleteSubscriptionLine,
   confirmSubscription,
