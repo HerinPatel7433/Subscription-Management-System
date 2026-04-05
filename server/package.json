@@ -11,6 +11,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "node prisma/seed.js",
+    "seed:mock": "node prisma/seed_mock.js",
     "prisma:studio": "prisma studio"
   },
   "prisma": {
