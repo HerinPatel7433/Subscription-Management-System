@@ -9,7 +9,7 @@ function formatTax(tax) {
     name: tax.name,
     rate: Number(tax.rate),
     type: tax.type,
-    is_active: tax.isActive,
+    active: tax.isActive,
     created_at: tax.createdAt,
   };
 }

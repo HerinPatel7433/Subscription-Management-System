@@ -9,13 +9,7 @@ import {
   type Tax,
 } from '@/services/billingService'
 
-const MOCK_TAXES: Tax[] = [
-  { id: '1', name: 'GST 18%',   rate: 18, active: true,  created_at: '2024-01-01' },
-  { id: '2', name: 'GST 12%',   rate: 12, active: true,  created_at: '2024-01-01' },
-  { id: '3', name: 'GST 5%',    rate: 5,  active: true,  created_at: '2024-01-01' },
-  { id: '4', name: 'No Tax',    rate: 0,  active: true,  created_at: '2024-01-01' },
-  { id: '5', name: 'Import Duty', rate: 25, active: false, created_at: '2024-03-15' },
-]
+
 
 type TaxForm = {
   name: string
@@ -37,9 +31,9 @@ export default function TaxesPage() {
     try {
       setLoading(true)
       const res = await getTaxes()
-      setTaxes(res.data.length ? res.data : MOCK_TAXES)
+      setTaxes(res.data || [])
     } catch {
-      setTaxes(MOCK_TAXES)
+      setTaxes([])
     } finally {
       setLoading(false)
     }
