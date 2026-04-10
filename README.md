@@ -29,12 +29,6 @@
 11. **Cron Jobs / Billing Engine**: Backend processors for generating periodic invoices and validating states.
 12. **Admin Dashboard**: Aggregated high-level views featuring Recharts-based telemetry and quick actions.
 
-## 👥 Team Roles
-
-| Name | Role | GitHub Username |
-| :--- | :--- | :--- |
-| Janvee | Project Manager / Tester | [@Janvee](#) |
-| Herin Patel | Lead Developer | [@HerinPatel7433](https://github.com/HerinPatel7433) |
 
 ---
 
